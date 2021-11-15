@@ -1,0 +1,216 @@
+# %% markdown
+# # Programming Exercises
+#
+# ## Rotate a List
+# "Rotating" a list is removing the first element of a list, and putting it at the end of the list.
+# %% codecell
+x = [x**2 for x in range(10,25)]
+print(x)
+# Perform the rotation.
+
+# %% codecell
+x.append(x[0])
+print(x)
+x.remove(100)
+print(x)
+# %% codecell
+print(x[1:] + x[0:1])
+
+# %% codecell
+print(x[1:] + [x[0]])
+# %% codecell
+print([*x[1:]])
+print([number for number in x[1:]])
+# %% markdown
+# ## Math Shortcuts
+# %% codecell
+# Consider this portion of code that adds up a sequence of numbers
+sum = 0
+for number in range(1,11):
+    sum = sum + number
+print(sum)
+# %% codecell
+# Now, see this equivalent version of the code
+sum = 0
+for number in range(1,11):
+    sum += number
+print(sum)
+# %% markdown
+# ### How many of these shortcuts are there?
+#
+# (See the Assignment Operators)
+#  * https://www.tutorialspoint.com/python/python_basic_operators.htm
+# %% codecell
+a = 21
+b = 10
+c = 0
+
+c = a + b
+print("Line 1 - Value of c is ", c)
+# %% codecell
+c += a
+print("Line 2 - Value of c is ", c)
+# %% codecell
+c *= a
+print("Line 3 - Value of c is ", c)
+# %% codecell
+c /= a
+print("Line 4 - Value of c is ", c)
+# %% codecell
+c  = 11
+c %= 3
+print("Line 5 - Value of c is ", c)
+# %% codecell
+c **= a
+print("Line 6 - Value of c is ", c)
+# %% codecell
+c //= a
+print("Line 7 - Value of c is ", c)
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+
+# %% markdown
+# # Tuples
+#
+# ## First, a review of what we know about strings and lists
+# %% codecell
+# l is a list of individual words taken from this string:
+l = "Hello, how are you today".split()
+print(l)
+# %% codecell
+# We can add (append) to a list
+l.append(3)
+print(l)
+# %% codecell
+# We can access an individual element of the list
+print(l[2])
+# %% codecell
+# We can change an individual element of a list
+l[2] = "blablabla"
+print(l)
+# %% markdown
+# ### Compare this behavior to strings
+# %% codecell
+# Let's compare that to how strings operate
+message = "hello how are you"
+print(message)
+# %% codecell
+# We can access a specific element of a string
+print(message[3])
+# %% codecell
+# We can append something to the end of a string
+message += "5"
+print(message)
+# %% codecell
+# We can't change something in the middle of a string, so the
+# following code is not permitted.  If you un-comment it and try
+# to run it, you will receive an error.
+message[3] = "X"
+# %% markdown
+# ### Key takeaway:
+# **Strings are immutable.**  Once they are created, they cannot be changed.  When we "added to" a string in the preceding example (`message += "5"`), we were not actually modifying the old string.  Rather, we were creating a new string that was equal to the value of the two preceding strings being concatenated together.
+# %% markdown
+# ## Tuples, what they really are...
+#
+# Tuples are very much like lists, but they are unchangeable (just like strings are unchangeable).  As programmers, we use **lists** to imply that the data in the sequence is expected to change.  Conversely, we use **tuples** to imply that the data in the sequence is expected to **not** be changed.
+# %% codecell
+# First, notice how a list is declared (using square braces)
+xList = [1,2,3]
+# Tuples are declared using parenthesis
+xTuple = (1,2,3)
+# Notice the difference when we print them out.
+print(xList)
+print(xTuple)
+# %% codecell
+# We can append() to a list
+xList.append('Hi')
+# We cannot append() to a tuple
+# xTuple.append('Hi')
+# %% codecell
+# We can reassign the value of one element in a list
+xList[1] = "changed"
+# We cannot reassign any value in a tuple.
+# xTuple[1] = "changed"
+# %% codecell
+# Notice the difference now when we print them out.
+print(xList)
+print(xTuple)
+# %% codecell
+# A tuple can be declared explicitly.
+(1,1,1,1,1)
+# %% codecell
+# Just like lists, concatenating tuples will result in a new tuple being created.
+(1,1) + (2,2)
+# %% codecell
+# Just like lists (and strings), we can multiply them by an integer, which makes them repeat
+(1,2) * 5
+# %% codecell
+# Example of multiplying an array.
+[0] * 26
+# %% codecell
+# Example of creating a list with a single element.
+l = [23]
+print(l)
+# %% codecell
+# Example of creating a tuple with a single element (notice the comma that is
+# required when the tuple only has a single element).
+t = (23,)
+print(t)
+# %% codecell
+# In a surprising twist, we can leave the parenthesis out, but because we have commas,
+# Python will still understand that we are implying a tuple.
+t = 23,4,5,.17,"why Python.... why???"
+print(t)
+print(t[4])
+# %% codecell
+# This also works for a tuple with only one value in it.
+t = 23,
+print(t)
+# %% codecell
+# Here is a two-dimentional list.  Notice how we access the elements of the deeper dimensions.
+tt = [[0, "a"], [0,42]]
+print(tt)
+print(tt[1])
+print(tt[1][1])
+# %% codecell
+# Here is a two-dimentional tuple.  Notice how we access the elements of the deeper dimensions.
+tt = (0, "a"), (0,42)
+print(tt)
+print(tt[1])
+print(tt[1][1])
+# %% codecell
+# Here is a two-dimentional list.  Notice how we access the elements of the deeper dimensions.
+tt = [(0, "a"), (0,42)]
+print(tt)
+print(tt[1])
+print(tt[1][1])
+# %% codecell
+# Here is a two-dimentional list.  Notice how we access the elements of the deeper dimensions.
+tt = [(0, "a"), (0,42), 123456789]
+print(tt)
+print(tt[1][1])
+
+# %% markdown
+# ## Understanding enumerate()
+# %% codecell
+# The point of this code is to walk you through the concept of what the enumerate()
+# function does.  That is, it returns a list, in which each row contains a tuple
+# with two elements.  The first number in the tuple is the index from the original
+# list.  The second value is the corresponding value from the original list.
+import string
+print(string.ascii_lowercase)
+lowalpha = [*string.ascii_lowercase]
+print(lowalpha)
+print([*enumerate(lowalpha)])
+
+# %% codecell
+for index, ch in enumerate(string.ascii_lowercase):
+    print(f"{ch} is character number {index}.")
+# %% codecell
+
+# %% codecell
+
+# %% codecell

@@ -1,0 +1,351 @@
+# %% markdown
+# # Zip Reminder
+# %% codecell
+# points
+import math
+x = [*range(50)]
+y = [math.sin(i) for i in x]
+print(x)
+print()
+print(y)
+
+# %% codecell
+# points
+import math
+x = [*range(50)]
+y = [math.sin(i) for i in x]
+points = [*zip(x, y)]
+print(points)
+
+# %% markdown
+# # Intro to Classes
+# https://docs.python.org/3.6/tutorial/classes.html
+# %% codecell
+## Definition vs instance
+
+## Class is a definition of "what" the object is
+
+## Instance is the object as a variable
+
+## cookie cutter       vs          cookie
+##   (class)               (instance, or variable)
+
+class Point:
+    pass
+
+p = Point()
+
+print(type(p))
+print(type(p) is Point)
+print(type(p) is list)
+print(type(p) is dict)
+print(type(p) is not list)
+
+# %% codecell
+d = {}
+d = dict()
+print(type(d) is Point)
+print(type(d) is list)
+print(type(d) is dict)
+print(type(d) is not list)
+
+# %% codecell
+l = []
+l = list()
+print(type(l) is Point)
+print(type(l) is list)
+print(type(l) is dict)
+print(type(l) is not list)
+
+# %% codecell
+# Examples of type() using familiar types
+s = "Hello"
+print(type(s))
+print(type(s) is str)
+print()
+
+print(type(3))
+print(type(3.5))
+# %% codecell
+# When an object is created a "constructor" function is called.
+# The constructor is always called `__init__`.
+# We will explain `self` part in a moment.
+
+class Point:
+    def __init__(self):
+        print("I'm in the constructor!!!!")
+
+p = Point()
+# %% markdown
+# ***Note: names such as `__init__` have a special name in Python.  They are called "dunder" methods (for "D"ouble "Under"score).***
+#
+# ***You will see a lot of them!***
+# %% markdown
+# ## Making the Constructor do something useful
+# %% codecell
+# Here is a class that stores two values as `xpos` and `ypos`.
+# You can set the values in the constructor.
+
+# `self` is how an object refers to itself inside the class definition.
+# `self` is the instance of the object class.
+
+class Point:
+    def __init__(self, x=0, y=0):
+        # Save the x and y values as attributes on this object.
+        self.xpos = x
+        self.ypos = y
+
+# %% codecell
+# Notice that each instance (p, q, r) of the Point object
+# has it's own `xpos` and `ypos`.
+
+p = Point(3, 4)
+print(p.xpos, p.ypos)
+# %% codecell
+p = Point(3, 4)
+print(p.xpos, p.ypos)
+
+q = Point()
+print(q.xpos, q.ypos)
+
+r = Point(y=42, x=-13)
+print("r is", r.xpos, r.ypos)
+# %% markdown
+# ### Reminder about Named Arguments
+# %% codecell
+print(1,2,3)
+print(1,2,3,sep="---")
+# %% codecell
+print(1,2,3,sep="---", end="!")
+print(4,5,6)
+# %% codecell
+print(1,2,3, end="!",sep="---")
+print(4,5,6)
+# %% markdown
+# ### Observation
+#
+# Look at the line that says:
+#
+# ```print("r is", r.xpos, r.ypos)```
+#
+# Isn't it ugly?
+#
+# I would rather be able to type something like this:
+#
+# ```print("r is", r)```
+# %% codecell
+print("r is", r)
+# %% markdown
+# ### Making objects print out in a more user-friendly style.
+# %% codecell
+# The dunder method `__str__` lets us tell Python how to convert
+# the object into a string so that it can be
+# printed out nicely.
+
+# The first argument of `__str__` is always `self`, which is a
+# reference to the object on which the method was called.
+# This is similar to what we saw in the constructor `__init__`.
+
+class Point:
+    def __init__(self, x=0, y=0):
+        self.xpos = x
+        self.ypos = y
+
+    def __str__(self):
+        return f"({self.xpos}, {self.ypos})"
+
+# %% codecell
+r = Point(y=42, x=-13)
+print("r is", r)
+print(f"r is {r}")
+# %% markdown
+# ### A quick word about `__str__`
+#
+# The general philosophy is that `__str__` should return a string which is easily readable and user-friendly.
+# %% codecell
+# Notice what is printed out:
+ex1 = [1,2,3]
+print(ex1)
+# %% codecell
+ex2 = (1,2,3,4,5)
+print(ex2)
+# %% codecell
+ex3 = {'foo': 1, 'bar': 42, 'baz': None}
+print(ex3)
+# %% codecell
+print(ex3.keys())
+# %% codecell
+r = Point(y=42, x=-13)
+print(r)
+# %% markdown
+# `__str__` is used when someone calls the `str()` function and passes in your object.
+# %% codecell
+r = Point(y=42, x=-13)
+message = "There is a treasure at coordinates " + str(r) + "!"
+print(message)
+# %% markdown
+# `__str__` is also used when putting an object directly into a format string, as seen below.
+# %% codecell
+r = Point(y=42, x=-13)
+message = f"There is a treasure at coordinates {r}!"
+print(message)
+# %% markdown
+# ## Classes can have custom methods
+#
+# Methods are simply functions that can be called using the object.  A method will usually do something or return some value that is specific to the object.
+#
+# You have already been using methods on objects... ***a lot!!!***
+# %% codecell
+s = "The quick brown fox jumps over the lazy dog."
+# %% codecell
+print(s)
+# %% codecell
+print(s.upper())
+print(s.title())
+print(s.lower())
+print(s.islower())
+print(s.replace(' ', '~'))
+print(s.split())
+# %% markdown
+# In Python, all methods on an object are declared as part of the class.
+#
+# Just like `__init__` and `__str__`, the method's first argument is always `self`, which is a reference to the object on which the method was called.
+# %% codecell
+import math
+class Point:
+    def __init__(self, x=0, y=0):
+        self.xpos = x
+        self.ypos = y
+
+    def __str__(self):
+        return f"({self.xpos}, {self.ypos})"
+
+    def magnitude(self):
+        return math.sqrt(self.xpos**2 + self.ypos**2)
+# %% codecell
+p = Point(3, 4)
+print(f"{p} has magnitude {p.magnitude()}")
+
+q = Point()
+print(f"{q} has magnitude {q.magnitude()}")
+
+r = Point(y=42, x=-13)
+print(f"{r} has magnitude {r.magnitude()}")
+# %% markdown
+# ### Example of using a Point for something practical
+# %% codecell
+import math
+points = [Point(i/10, math.sin(i/10)) for i in range(50)]
+print(points[0])
+print(points[1])
+print(points[-1])
+# %% codecell
+for p in points:
+    print(p)
+# %% codecell
+# Notice, though, that points[-1] is not a tuple, even though
+# it looks like one when printed out!
+print(points[-1])
+print(points[-1].xpos)
+print(points[-1].ypos)
+# %% codecell
+# What happens if you try to treat it like a tuple?
+# Try it and find out!
+
+print(points[-1])
+print(points[-1][0])
+
+# %% markdown
+# # Dunder methods `__str__()` and `__repr__()`
+# %% codecell
+# Notice the output when `__repr__()` is not defined for the class
+import math
+class Point:
+    def __init__(self, x=0, y=0):
+        self.xpos = x
+        self.ypos = y
+
+    def __str__(self):
+        return f"({self.xpos}, {self.ypos})"
+
+    def magnitude(self):
+        return math.sqrt(self.xpos**2 + self.ypos**2)
+
+p = Point(3.4, 5)
+print(p)
+print()
+
+points = [Point(x/10, math.sin(x/10)) for x in range(50)]
+print(points)
+# %% markdown
+# ### What's happening?!?
+#
+# Simple.  When a container (like the `list` that we are using above) prints out an object, it doesn't use the `__str__` method!  It uses one called `__repr__` instead, and if that is not defined, then it prints out the ugly format seen above.
+# %% codecell
+# Now that `__repr__()` is defined, the output is nicer.
+# __repr__ output should normally be in the form of a valid
+# initialization of the object.
+import math
+class Point:
+    def __init__(self, x=0, y=0):
+        self.xpos = x
+        self.ypos = y
+
+    def __str__(self):
+        return f"({self.xpos}, {self.ypos})"
+
+    def __repr__(self):
+        return f"Point{self}"
+
+    def magnitude(self):
+        return math.sqrt(self.xpos**2 + self.ypos**2)
+
+p = Point(3.4, 5)
+print(p)
+print()
+
+points = [Point(x, math.sin(x)) for x in range(50)]
+print(points)
+# %% codecell
+x = Point(0, 0.0)
+# %% codecell
+l = [1,2,3]
+print(str(l))
+print(repr(l))
+# %% codecell
+newList = [Point(0, 0.0), Point(1, 0.8414709848078965), Point(2, 0.9092974268256817), Point(3, 0.1411200080598672), Point(4, -0.7568024953079282), Point(5, -0.9589242746631385), Point(6, -0.27941549819892586), Point(7, 0.6569865987187891), Point(8, 0.9893582466233818), Point(9, 0.4121184852417566), Point(10, -0.5440211108893698), Point(11, -0.9999902065507035), Point(12, -0.5365729180004349), Point(13, 0.4201670368266409), Point(14, 0.9906073556948704), Point(15, 0.6502878401571168), Point(16, -0.2879033166650653), Point(17, -0.9613974918795568), Point(18, -0.7509872467716762), Point(19, 0.14987720966295234), Point(20, 0.9129452507276277), Point(21, 0.8366556385360561), Point(22, -0.008851309290403876), Point(23, -0.8462204041751706), Point(24, -0.9055783620066238), Point(25, -0.13235175009777303), Point(26, 0.7625584504796027), Point(27, 0.956375928404503), Point(28, 0.27090578830786904), Point(29, -0.6636338842129675), Point(30, -0.9880316240928618), Point(31, -0.404037645323065), Point(32, 0.5514266812416906), Point(33, 0.9999118601072672), Point(34, 0.5290826861200238), Point(35, -0.428182669496151), Point(36, -0.9917788534431158), Point(37, -0.6435381333569995), Point(38, 0.2963685787093853), Point(39, 0.9637953862840878), Point(40, 0.7451131604793488), Point(41, -0.158622668804709), Point(42, -0.9165215479156338), Point(43, -0.8317747426285983), Point(44, 0.017701925105413577), Point(45, 0.8509035245341184), Point(46, 0.9017883476488092), Point(47, 0.123573122745224), Point(48, -0.7682546613236668), Point(49, -0.9537526527594719)]
+print(newList)
+# %% codecell
+# If you absolutely *had* to print out the str() representation
+# of things in a list.
+# Yeah, it's ugly.
+print(f'[{", ".join([str(p) for p in points])}]')
+# %% markdown
+# ### A quick word about `__repr__`
+#
+# The general philosophy is that `__repr__` should return a string which, if copy-and-pasted, could be used to create another object of equivalent values.
+#
+# ### What's the difference between `__str__` and `__repr__`?
+#
+# `__str__` should make your object simple to grasp.  ***Readability*** is the goal.
+#
+# `__repr__` should be exact in its meaning.  ***Unanbiguity*** is the goal.
+# %% codecell
+# Sometimes the `__str__` and the `__repr__` methods are the same.
+ex1 = [1,2,3]
+print(ex1.__str__())
+print(ex1.__repr__())
+# %% codecell
+# Rather than call the dunder form of the method (which is
+# a bit ugly), there is also a function form, which will
+# call the ugly, dunder form for you in the background.
+ex1 = [1,2,3]
+print(str(ex1))
+print(repr(ex1))
+# %% codecell
+# Here is an example of an object whose str() and repr()
+# are different.
+import datetime
+today = datetime.datetime.now()
+print(str(today))
+print(repr(today))

@@ -1,0 +1,126 @@
+# %% markdown
+# ## ASCII values
+# https://asciitable.com
+#
+# * Every character has a number associated with it.
+# * We can convert from a *character* to it's associated number using `ord()`
+# * We can convert from a *number* to it's associated character using `chr()`
+# %% codecell
+print("A")
+print(ord("A"))
+# %% codecell
+print(65)
+print(chr(65))
+# %% codecell
+# Print the alphabet
+print([*range(ord('A'), ord('Z') + 1)])
+# %% codecell
+# Print the alphabet
+numbers = [*range(ord('A'), ord('Z') + 1)]
+print([chr(number) for number in numbers])
+# %% codecell
+# Print the alphabet
+print([chr(number) for number in [*range(ord('A'), ord('Z') + 1)]])
+# %% codecell
+print([*"ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+# We can use list comprehensions to build lists of printable characters.
+print([chr(x) for x in range(32, 127)])
+# %% markdown
+# ## Alphabet list
+# Generate a list containing all letters of the alphabet, lowercase and uppercase.  This is a good opportunity to use `ord()` and `chr()`.
+# %% codecell
+# Here, we are creating a string by creating two lists
+# of ascii characters (the first is uppercase, the second
+# is lowercase).  Next, we concatenate the two lists into
+# one large list.  Finally, we use the ''.join() function
+# to turn it into one big, long string.
+
+uppers = [chr(number) for number in [*range(ord('A'), ord('Z') + 1)]]
+lowers = [chr(number) for number in [*range(ord('a'), ord('z') + 1)]]
+print(''.join(uppers + lowers))
+# %% codecell
+print(''.join( \
+              [chr(num) for num in ( \
+                                    [*range(ord('A'), ord('Z') + 1)] + ]
+                                    [*range(ord('a'), ord('z') + 1)]) \
+              ]) \
+     )
+# %% codecell
+# The `string` library contains a variable called `string.ascii_letters`,
+# which provides a similar string with much less typing.
+
+# First, we have to `import` the library
+import string
+
+# Now, we can access the string of ascii letters
+print(string.ascii_letters)
+print() # Just printing a blank line as a separator.
+
+# Here, we can use a "splat" to convert the string
+# into a list.
+print([*string.ascii_letters])
+# %% codecell
+import string
+print(string.printable)
+# %% codecell
+import string
+for ch in range(0,256):
+    if chr(ch) in string.printable:
+        print(ch, chr(ch))
+# %% markdown
+# ### reversed()
+# %% codecell
+# There is also a function that will reverse a sequence
+print(sorted("abracadabra"))
+print(reversed("abracadabra"))
+# %% codecell
+# There is also a function that will reverse a sequence
+print([*reversed("abracadabra")])
+# %% codecell
+# There is also a function that will reverse a sequence
+print(''.join([*reversed("abracadabra")]))
+# %% codecell
+# Notice that reversed() returns a sequence,
+# just like the range() function.
+# why is that?
+print(reversed("abracadabra"))
+print(reversed(["a", "b", "c"]))
+print(range(30))
+# %% codecell
+# As you have already seen, we can use the splat operator
+# to convert the sequences into a proper list.
+print([*reversed("abracadabra")])
+print([*reversed(["a", "b", "c"])])
+print([*range(30)])
+# %% markdown
+#  * A note to advanced users: Yes, there is another way to reverse a list using slice notation, and we will get to that in the future.  But it has its own limitations.  Be patient, we'll get there...
+# %% codecell
+letters = [*"rally sons of notre dame"]
+print(letters)
+print(letters[10:])
+# %% markdown
+# #### Practice Time!
+#
+# Write a code snippet to test if words are a palindrome.
+#
+# Expected output:
+# ```
+# "tacocat" is a palindrome
+# "racecar" is a palindrome
+# "food" is not a palindrome
+# ```
+# %% codecell
+wordList = ['tacocat', 'racecar', 'food']
+
+for word in wordList:
+    if word == ''.join([*reversed(word)]):
+        print(f'"{word}" is a palindrome')
+    else:
+        print(f'"{word}" is not a palindrome')
+
+# %% codecell

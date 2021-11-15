@@ -1,0 +1,293 @@
+# %% markdown
+# # Types of Errors
+#
+# * Compilation/Syntax Errors
+# * Runtime Errors
+# * Semantic/Logic Errors
+# %% markdown
+# ## Compilation/Syntax Errors
+# * Your code cannot be executed because the compiler doesn't understand the code that you have written.
+# * It is usually called, quite literally, a "SyntaxError", but it may have other descriptive names as well.
+# %% codecell
+3 = y
+# %% codecell
+0
+42
+042
+# %% codecell
+x = 3 4
+# %% codecell
+x = 3 +
+4
+print(x)
+# %% codecell
+# The backslash, however, makes this valid
+x = 3 + \
+4
+print(x)
+# %% markdown
+# ## Runtime Error
+# * An error that causes the execution of your code to stop.
+# * This is often called an "Exception"
+# * In the future, we will see how to prevent these Exceptions from halting our program.
+# %% codecell
+print("foo" * 3)
+print("foo" / 3)
+# %% codecell
+s = "foo"
+print(s * 3)
+print(s / 3)
+# %% codecell
+x = 3
+y = 1
+print(x / y)
+print(x / (y - 1))
+# %% markdown
+# ## Semantic/Logic Errors
+# * The syntax is correct.
+# * The code is executed exactly as written.
+# * The code does not behave correctly or it does not give the write answer.
+#   * e.g., the software has a "bug" in it.
+#   * https://en.wikipedia.org/wiki/Software_bug
+# %% codecell
+x = 3
+y = 5
+print(f"The value of x is: {x}")
+print("The value of x is:", x)
+print("The value of x is: " + str(x))
+print("The value of x is: %d" % x)
+print("The value of x is: {}".format(x))
+
+print(f"The value of y is: {y}")
+print(f"x + y = {x-y}")
+# %% markdown
+# # Practice problems
+# %% markdown
+#  ### Compute the volume of a sphere
+#  The volume of a sphere with radius r is `(4/3) π r^3`. What is the volume of a sphere with radius 5?
+# %% codecell
+#import math
+from math import pi
+print(pi)
+# %% codecell
+r = 5
+print(4/3*math.pi*r**3)
+# %% markdown
+# ### Interactive programming
+# You can write interactive scripts with `input()`:
+# %% codecell
+s = input("What do you want me to say? ")
+print(f'"{s}"')
+# %% codecell
+# Beware!  The value returned by input() is a string!
+s = input("Enter a number: ")
+print(type(s))
+print(s / 10)
+# %% codecell
+# You can convert it to either an int or a float
+# using int() or float(), respectively
+s = input("Enter a number: ")
+print(float(s) / 10)
+# %% markdown
+# Re-write your "volume of a sphere" script so that it asks the user to provide the radius.
+# %% codecell
+r = float(input("gimme a radius, yo:"))
+print(4/3*math.pi*r**3)
+# %% markdown
+# ### Simple math problem
+# If you run a 10 kilometer race in 42 minutes 42 seconds, what is your average speed in miles per hour?
+# %% codecell
+
+
+
+
+
+
+
+# %% codecell
+"""
+ 10km              10km
+------ = ------------------------
+42'42"    (42 * 60) + 42 seconds
+
+Also, 1 mile = 1.609344km
+"""
+''
+# %% codecell
+"""
+          10km              60 * 60 seconds       1 mile
+------------------------ * ----------------- * ------------
+ (42 * 60) + 42 seconds         1 hour          1.609344km
+"""
+# %% codecell
+print(f"{10 / ((42 * 60) + 42) * (60 * 60) / 1.609344:.2} mph")
+print(f"{(10 * 60 * 60)/(((42 * 60) + 42) * 1.609344):.2} mph")
+# %% markdown
+# # Control Flow Operators
+# ## If..else
+# * https://docs.python.org/3/tutorial/controlflow.html#if-statements
+# * `<expression>` is an expression that can be interpreted as a boolean value
+#   * https://docs.python.org/3/library/stdtypes.html
+# * Notice that code blocks are indented
+# * You cannot perform an assignment statement (e.g., `x = 3`) in `<expression>`
+# %% codecell
+# if <expression>:
+x = 4
+y = 8
+if x < y:
+    print(f"{x} is less than {y}")
+    print("HI")
+else:
+    print("%f is greater than %f" % (x, y))
+    print("BYE")
+print("I am always run after the if statement.")
+# %% codecell
+x = .01
+x = x + .01
+x = x * 50
+if x == 1:
+    print("Yes")
+else:
+    print("No")
+# %% markdown
+# ## if..elif..else
+# * `elif` is short for "else if"
+# %% codecell
+# Change the value of x to see a different bock of code being executed.
+x = 1
+if x < 0:
+    print("x is less than 0")
+elif x == 0:
+    print("x is equal to 0")
+else:
+    print("x is greater than 0")
+
+# %% codecell
+if True:
+    print("This was true")
+if not False:
+    print("blah")
+# %% markdown
+# ## While
+# * A looping structure, which continutes looping until `<expression>` is false
+# %% codecell
+# while <expression>:
+x = 10
+while x >= 0:
+    print(x)
+    x = x - 1
+
+print("I'm done!")
+# %% codecell
+# Here is a common logic error:
+x = 10
+while x >= 0:
+    print(x)
+# %% codecell
+# Another common logic error:
+x = 10
+while x > 0:
+    print(x)
+    x = x + 1
+print("Finished!")
+# %% codecell
+# while <expression>:
+x = 10
+while x >= 0:
+    print(x)
+    x = x - 2.3
+# %% codecell
+# Please don't do this!
+total = 10;
+while (total != 0):
+    print(total)
+    total = total - .01
+# %% codecell
+# Nesting control flow structures
+# (putting an if: statement inside a while: statement)
+x = 10
+while x >= 0:
+
+    if x % 3 == 0:
+        print(x)
+
+    if (x % 3) == 0:
+        print(x)
+
+    if not (x % 3):
+        print(x)
+
+    x = x - 1
+# %% codecell
+x = 0
+while x < 15:
+    print('--------------------------')
+    print(f"  x = {x}")
+    if not x % 3:
+        print(f"  {x} is a multiple of 3")
+    # if x % 3:
+    else:
+        print(f"  {x} is not a multiple of 3")
+    x = x + 2
+    print("  increasing x by 2")
+
+# %% markdown
+# ## Example: Fizz Buzz
+# Rules:
+# 1. Print all numbers from 1 to x  (Ask the user for the integer x).
+# 2. If the number that is printed is divizible by 3, also print "Fizz"
+# 3. If the number that is printed is divisible by 5, also print "Buzz"
+# 4. If the number that is printed is divisible by 3 and 5, also print "Fizz Buzz"
+#
+# A few notes:
+# * Because printing a line is done in parts (first the number is printed, then the `Fizz`, then the `Buzz`), `end=""` must be added as an argument to the `print()` function, in order to prevent it from inserting a new line automatically.
+# * The final `print()` is only there in order to add the newline, which was purposefully omitted from the earlier `print` statements.
+#
+# Sample output:
+# ```
+# 1
+# 2
+# 3 Fizz
+# 4
+# 5 Buzz
+# 6 Fizz
+# 7
+# 8
+# 9 Fizz
+# .
+# .
+# .
+# 15 FizzBuzz
+# ```
+# %% codecell
+maxNumber = input("Enter a number: ")
+maxNumber = int(maxNumber)
+counter = 1
+while counter <= maxNumber:
+    print(f"{counter:2} ", end="")
+    if not counter % 3:
+        print("Fizz", end="")
+    if not counter % 5:
+        print("Buzz", end="")
+    print()
+    counter = counter + 1
+# %% markdown
+# ## Break and Continue
+# * https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
+# * Used to modify the execution flow within a loop
+# %% codecell
+# What will this print?
+x = 10
+while x > 0:
+    x = x - 1
+    if x % 2:
+        continue
+    print(x)
+# %% codecell
+# What will this print?
+x = 10
+while x > 0:
+    x = x - 1
+    if x < 5:
+        break
+    print(x)

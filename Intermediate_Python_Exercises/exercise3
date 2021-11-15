@@ -1,0 +1,263 @@
+# %% markdown
+# # Homework 4 (120 Points)
+# %% codecell
+### CELL 0 ###
+# Please enter your names here:
+# 1.) Tyler Sims
+# 2.)
+##############
+# Note: When submitting your homework, if person #1 submits
+# the Notebook, then person #2 should also include a note in
+# Sakai that their homework was submitted under #1's name.
+# This will help us to make sure that everyone is getting their
+# grade and comments in a timely manner!
+##############
+# %% markdown
+# ## A practical example of analyzing and extracting data points from some text.
+#
+# Your task is to take the full text of several books from Project Gutenberg, sanitize them, and then analyze the text.  I understand that everyone may have a different idea of what "sanitized" input may mean, so I provided several guidelines so that everyone's results will be similar.
+#
+# Obviously, you need to get the text from the book from somewhere, so we will use the Project Gutenberg text file.  I have provided code for you to run that will download the proper information for you.
+# %% codecell
+# This function puts the text of some book in text format
+# from a url (e.g., Project Gutenberg) into a string variable.
+# The code also saves a copy of the book in a text file on
+# your computer.  The next time that you run the script,
+# it will first try to load the text of the book from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+def loadBook(filename, url):
+    try:
+        # Assume the file exists.  Try to open it.
+        textFile = open(filename, 'r', encoding="utf-8")
+    except:
+        # The file open() failed.
+        try:
+            # Try to download the file.
+            from urllib.request import urlopen
+            print ("Fetching the file from the interwebs...")
+            response = urlopen(url)
+            text = response.read().decode("utf-8", errors='ignore')
+
+            # Write the text of the book to a file.
+            textFile = open(filename, 'w', encoding="utf-8")
+            textFile.write(text)
+            textFile.close()
+
+            # Try to open the file from the disk (again).
+            textFile = open(filename, 'r', encoding="utf-8")
+        except:
+            # Something else went wrong.  Do minor cleanup,
+            # then raise another Exception, which will cause
+            # the script to stop running (with an error).
+            if textFile: textFile.close()
+            raise Exception("Could not load file.")
+
+    # If we got this far, then everything should be fine.
+    # The text file was opened successfully from a local
+    # copy, so now we can continue with the process and
+    # read the file contents.
+    text = textFile.read()
+    textFile.close()
+    return text
+
+# %% markdown
+# The preceding code snippet provides a function that can download text from a url.  We will use it to download books from Project Gutenberg.
+#
+# It would be interesting if we could begin analyzing the text of the books from Project Gutenberg, but they all need to be cleaned up quite a bit first.  Write code to perform the necessary transformations and analysis.  I have broken up the tasks into smaller functions to help you to think through everything that needs to be done.
+#
+# **NOTE: Your functions should never print out anything.  The code provided will do all of the printing necessary.  While developing your code, however, you will undoubtedly find it helpful to print out information, to help in your debugging and development.  Just make sure to remove any of these extra `print()` statements before submitting your assignment!**
+#
+# ## Overview
+#
+# The goal of this section is to identify all of the **proper nouns** in the text of a book, and then to determine which proper nouns are the most popular in that book.
+#
+# We will consider a noun to be proper if it is capitalized when it is not the first word of the sentence or quoted sentence.  For example, consider the string `As Dorothy entered they looked at her curiously, and one of them whispered: "Are you really going to look upon the face of Oz the Terrible?"`  In this string, `As` and `Are` should not be considered to be proper nouns, but `Dorothy`, `Oz`, and `Terrible` should be.
+#
+# When trying to identify proper nouns, ignore any potential word that is in all caps.
+#
+# Once identified, we will consider any posessive forms (e.g., adding an apostrophe 's') to be the same as the non-posessive form (e.g., `Mayor's` is the same as `Mayor`).  A function that is explained below, called `normalize()` can help in this type of conversion.
+#
+# Also, once identified, we will count any occurrence of the proper noun, regardless of capitalization (except for all caps; anything in all caps should be completely ignored), posessive form, or position within the sentence.  For example, because `Dorothy` was identified as a proper noun in the earlier sentence example, then later, when counting the number of occurrences of `Dorothy` in the text, we would also count appearances in sentences such as this: `Dorothy felt as if she were going up in a balloon.`.
+#
+# For now, don't worry about trying to fix or ignore chapter titles.  Detecting them can be a difficult problem, and beyond the scope of this assignment.
+#
+# Please note that you should not print out any of the intermediate steps.  The only output that should be produced is the final list.
+#
+# Make sure that you understand how the code is being used, and how the different functions are being called!
+#
+# ***Remember... There are multiple ways to do each part that is being asked for.  You already know all of the parts necessary to write this script, you just have to start thinking about different ways of putting it all together!  I believe in you!***
+#
+# ## HINTS
+#   1. You don't have to wait until 100% of the code is written before you begin testing.  In fact, that is a very bad idea!  If you don't have a solution for a particular function, then have it (temporarily) return a hard-coded solution so that you can focus on a different function.
+#   2. Part of the challenge (and why this assignment is important) is so that you can see how to attack larger, more complex problems.
+#   2. `getProperNouns()` is the most difficult function to write.  It might be best to save it for last.
+#   3. `getProperNouns()` requires a different approach to coding.  Up until now, we have been using techniques such as map, filter, and reduce, which looks at each element of a sequence individually.  You cannot use this approach here (at least not directly).  Rather, you have to look at each word in *context*.  That is, you have to consider the words around it.
+#       * If you are having trouble thinking through this problem.  Imagine trying to explain to someone how you are detecting a proper noun.  What steps are you performing mentally?  As you go through a string of text, what do you have to keep track of in order to identify the proper nouns and ignore other words?
+#   4. It would probably be very helpful to you to write additional helper functions as needed.  I gave you an example of this approach by having you write the `normalize()` function.  It is intended for you to then use the `normalize()` function elsewhere in your code.  Writing small functions like this makes it easier to reason about your code, by breaking it apart into smaller parts that, individually, are easier to solve and to test for correctness.
+#   5. Examine the text of the input files!  They aren't always well-behaved!  Quotes might not only use the `"` character!  You need to account for these types of irregularities.
+#   6. It is doubtful that everyone will be able to solve all parts of this assignment.  The point is to do what you can, and solve what you can.
+# %% codecell
+### Write your code below this line ###
+
+### Overview ###
+# See the parseTextForProperNouns() function at the bottom of this
+# cell.  You do not have to change that function, but it will
+# call several other functions which you will need to write
+# the body of the function.
+# Each of the needed functions is described below.  When complete,
+# the functions should work together to scrape data from the text
+# files.
+
+
+# There is a lot of extra text before and after the text of the book.
+# This extra text needs to be removed.
+# Remove all lines of text before (and including) the line of text:
+# "*** START OF THIS PROJECT GUTENBERG EBOOK..."
+#
+# Remove every line after (and including) the text:
+# "End of Project Gutenberg's..." and similar text.
+#
+# BE CAREFUL: The text is not always the same.  Figure out a solution
+# That should work the majority of the time for different
+# Project Gutenberg text files, especially including those used here.
+# (20 Points)
+import string
+def removeBoilerplate(text):
+    # After reviewing the text, I thouhgt the easiest way to get the begging and ending material off was thought the ***.
+    text = text[text.find("***")+3:]
+    text = text[text.find("***")+3:]
+    text = text[:text.find("***")]
+    text = "\n".join(text.splitlines()[:-3])
+    return text
+
+
+# Replace '--' with a space.
+# Perform any other cleanup.
+# (Hint: Look through the different texts.  Figure out if there's
+# anything that you can/should do about the different quote marks
+# used or other weird characters such as the underscore.)
+# You might find the .replace() function useful, but there are several
+# valid approaches.
+# (20 Points)
+def standardizeText(text):
+    text = text.replace("--"," ")
+    text = text.replace("_","")
+    text = text.replace("!  ","! ")
+    text = text.replace(".  ",". ")
+    text = text.replace("?  ","? ")
+    text = text.replace('“','"')
+    text = text.replace("’","'")
+    # These are all the areas I found to replace
+    # Return a string that is the sanitized version of the text.
+    return text
+
+
+# Create a function called normalize().
+# It should take in a word, and return a 'normalized' version of
+# that same word.  The 'normalized' version would be one in which
+# any apostrophy 's' are removed as well as any non-alphabetic characters.
+#
+# Ex: `Mayor's` should become `Mayor`
+#     `Thomas’` should become `Thomas`
+#
+# (Notice that different types of apostraphes are used in the different
+# text files.  One is an ASCII apostraphe, the other is a UTF-8 version
+# of an apostraphe.)
+# (20 Points)
+def normalize(word):
+    x = " ".join(string.ascii_letters)
+    word = word.replace("'s","")
+    for y in word:
+        if x.find(y) == -1:
+            word = word.replace(y,"")
+    # Return a string, which is the "normalized" version of the word.
+    return word
+# If done properly, the following line should print: Mayor Mayor
+print(normalize('''"Mayor's'''), normalize("Mayor"))
+
+
+# Scan through the text and generate a list that contains all of the
+# proper nouns found that are not the first word of a sentence or
+# the first word in a quoted portion of text.
+# To make it easy on yourself, only return "normalized" words.
+# (30 Points)
+def getProperNouns(text):
+    pN = []
+    text = text.split()
+    for x in range(1,len(text)):
+        if text[x].istitle():
+            if text[x].startswith("\n") or text[x].startswith("'") or text[x].startswith('"') or text[x-1].endswith('\n') or text[x-1].endswith("'") or text[x-1].endswith('"') or text[x-1].endswith(".")or text[x-1].endswith("?")or text[x-1].endswith("!"):
+                pN = pN
+            else:
+                pN = pN + [normalize(text[x])]
+    return pN
+
+
+# Scan through the text and count all occurrences of each proper noun
+# in the text.  It is suggested that you "normalize" all of the words
+# first, to minimize the amount of processing required.
+# (20 Points)
+def getProperNounCount(properNouns, text):
+    # Return a list of tuples, containing the noun and the frequency count.
+    # For example (not actual results) [('Robin', 18), ('Batman', 42)]
+    pNouns = []
+    for word in properNouns:
+        if word not in pNouns:
+            count = 1
+            properNouns = properNouns[1]
+
+    return answer
+
+
+# Sort the list of words and their frequency count, so that the
+# words with the highest frequency appear first in the list.
+# (10 Points)
+def sortProperNouns(nounList):
+    # Return nounList, sorted by the frequency number.
+    # For example, if nounList is [('Robin', 18), ('Batman', 42)],
+    # then the function would return [('Batman', 42), ('Robin', 18)]
+    return []
+
+
+##############################################
+### Do not change anything below this line ###
+##############################################
+
+# This function can be called on any text, and
+# the function will apply all of your transformations,
+# find the proper nouns, and then return a list of tuples
+# containing the proper noun and it's frequency of use,
+# sorted by the frequency.
+# This funcion will be called parseTextForProperNouns().
+def parseTextForProperNouns(text):
+    smallerText = removeBoilerplate(text)
+    cleanText = standardizeText(smallerText)
+    properNouns = getProperNouns(cleanText)
+    properNounCount = getProperNounCount(properNouns, cleanText)
+    return sortProperNouns(properNounCount)
+# %% codecell
+cc = loadBook("ChristmasCarol.txt", "http://www.gutenberg.org/files/46/46-0.txt")
+# You may uncomment this print() statement for development
+# purposes, but do not leave it uncommented when turning
+# in your assignment.
+#print(cc)
+print(parseTextForProperNouns(cc))
+#print(getProperNouns(standardizeText(removeBoilerplate(cc))))
+# %% codecell
+oz = loadBook("oz.txt", "http://www.gutenberg.org/cache/epub/55/pg55.txt")
+# You may uncomment this print() statement for development
+# purposes, but do not leave it uncommented when turning
+# in your assignment.
+#print(oz)
+print(parseTextForProperNouns(oz))
+
+# %% codecell
+frank = loadBook("frank.txt", "http://www.gutenberg.org/files/84/84-0.txt")
+# You may uncomment this print() statement for development
+# purposes, but do not leave it uncommented when turning
+# in your assignment.
+#print(frank)
+print(parseTextForProperNouns(frank))
+
+# %% codecell

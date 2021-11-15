@@ -1,0 +1,182 @@
+# %% markdown
+# ## Practice: Write a loop that prints out all numbers from 0 to 10
+# %% codecell
+x = 0
+while x <= 10:
+    print(x)
+    x = x + 1
+# %% codecell
+counter = 0
+maximum = 10
+while counter <= maximum:
+    print (counter)
+    counter = counter + 1
+# %% codecell
+counter = 0
+maximum = 10
+while counter <= maximum:
+    if counter > 5:
+        print (counter)
+    counter = counter + 1
+# %% markdown
+# ## For..in
+# * https://docs.python.org/3/tutorial/controlflow.html#for-statements
+# * Loop over items in a sequence
+#   * Lists
+#   * Strings
+#   * range() - https://docs.python.org/3/tutorial/controlflow.html#the-range-function
+# %% codecell
+# For <var> in <sequence>:
+for foo in range(11):
+    print(foo)
+
+# Equivalent while: statement
+foo = 0
+while foo < 11:
+    print(foo)
+    foo = foo + 1
+# %% codecell
+for character in "Howdy!":
+    print(character)
+# %% codecell
+listOfWords = "Mr. and Mrs. Dursley, of number four, Privet Drive, were proud to say they were perfectly normal, thank you very much.".split()
+print(listOfWords)
+print("==================")
+for word in listOfWords:
+    print(word)
+# %% codecell
+for num in range(10,-1,-2):
+    print(num)
+# %% markdown
+# # Lists
+# * https://docs.python.org/3/library/stdtypes.html#list
+# * Lists are one of the things that make Python *very* powerful (expressive)
+# %% codecell
+# Lists can be constructed explicitly
+x = [1, 3, -8, 42.5, "a"]
+print(x)
+print("=============")
+counter = 0
+for entry in x:
+    print(counter, entry)
+    counter = counter + 1
+# %% codecell
+# In this instance, x is all multiples of 2, from 2 to 20
+x = [2,4,6,8,10,12,14,16,18,20]
+z = 5
+for y in x:
+    if (y % z) == 0:
+    #if not y % z:
+        print(f"{y} is a multiple of {z} and a multiple of 2")
+# %% codecell
+# In this instance, x is all multiples of 2, from 2 to 20
+x = [2,4,6,8,10,12,14,16,18,20]
+for z in range(-10,11):
+    if z != 0:
+        for y in x:
+            if (y % z) == 0:
+                print(f"{y} is a multiple of {z} and a multiple of 2")
+# %% codecell
+# You don't need to use a variable if you don't want to
+z = 4
+for y in [2,4,6,8,10,12,14,16,18,20]:
+    if not y % z:
+        print(f"{y} is a multiple of {z} and a multiple of 2")
+# %% codecell
+# range() can take up to 3 arguments: the starting number,
+# the ending number (up to, but not including), and skip.
+# Unfortunately, range() is not a list, so we can't see its contents.
+print(range(10))
+# %% codecell
+# We can convert a range into a list
+print(list(range(10)))
+# %% codecell
+# We can also use this shorthand (as of Python 3.5)
+# It is sometimes called the "splat" operator, but that is not
+# an official name.  It is more generally called the
+# "asterisk" operator.
+# It has the following format: [* <some sequence> ]
+print([*range(10)])
+# %% codecell
+# This way, we can explore the range() function with different arguments.
+print([*range(5,10)])
+# %% codecell
+print([*range(-5,10,2)])
+# %% codecell
+# We can have a decreasing range if we use a negative skip.
+print([*range(10,-8, -1)])
+# %% codecell
+# Just another example of a negative skip.
+print([*range(10,-8,-3)])
+# %% codecell
+# We can use square bracket notation [] to access specific elements of a list.
+x = [*range(15,22)]
+print("x        =", x)
+print("x[0]     =", x[0])
+print("x[1]     =", x[1])
+print("x[2]     =", x[2])
+print("x[3]     =", x[3])
+print("x[1]+x[2]=", x[1] + x[2])
+# %% codecell
+# We can also use square brackets to give us sections of a list.
+# This is called "splicing" a list
+# The general format is [<from>:<to>]
+# As is common with Python, `<to>` is not included in the output.
+x = [*range(15,22)]
+print("x        =", x)
+print("x[3:5]   =", x[3:5])
+# %% codecell
+# If <to> is omitted, then it will return up to the end of the list.
+print("x        =", x)
+print("x[3:]    =", x[3:])
+# %% codecell
+# If <from> is omitted, then it will return beginning with the
+# first element of the list.
+print("x        =", x)
+print("x[:3]    =", x[:3])
+print("x[3:5]   =", x[3:5])
+# %% codecell
+# A negative index means to start counting from the back of the list.
+print("x        =", x)
+print("x[-1]    =", x[-1])
+print("x[-3]    =", x[-3])
+print("x[-3:]   =", x[-3:])
+print("x[:-3]   =", x[:-3])
+print("x[-5:-3] =", x[-5:-3])
+# %% markdown
+# ### See https://docs.python.org/3/library/stdtypes.html#common-sequence-operations for more operations on lists/sequences!
+# %% codecell
+# Accessing elements also works for strings!
+x = "FizzBuzz!!!"
+print("x      =", x)
+print("x[3:7] =", x[3:7])
+# %% codecell
+# Lists can be added together
+# This will create a new list containing everything
+# from the first list, followed by everything from
+# the second list.
+print([5,6,7] + [1,2,3])
+# %% codecell
+# Notice the philosophy that Python uses for the splicing
+# boundaries.  `x[:3]` will return elements 0,1,2, but not 3.
+# `x[3:6]` will return 3,4,5.  In this way, you can use
+# the same boundary as the end of one list, and the start of
+# another (in this case, the boundary is `3`), and the
+# `x[3]` will not be duplicated.
+#
+# That is why Python behaves in the way that it does.
+x = [*range(10)]
+print(x)
+print(x[:3] + x[3:6])
+# %% codecell
+# Of course, lists can be combined in any way that you want.
+x = [*range(10)]
+print(x)
+print(x[:3] + x[-2:])
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+
+# %% codecell

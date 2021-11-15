@@ -1,0 +1,87 @@
+# %% markdown
+# ## Functions
+#
+# * Functions are small pieces of code that separated out of the main script.
+# * Functions make it easy to re-use code!
+# * You can provide an **argument** to a function.
+# * A function can return a value of some sort
+# %% codecell
+# Simple function called `doubleIt()`
+# Purpose: Computes a new number that is twice as big as the provided value.
+# Arguments: `number`, a numeric value
+# Return: returns a numeric value
+def doubleIt(number):
+    number = number * 2
+    return number
+
+
+print(3)
+print(doubleIt(3))
+print()
+
+x = 8
+print("x =", x)
+print(doubleIt(x))
+print("x =", x)
+print()
+
+number = 10
+print("number =", number)
+print(doubleIt(number))
+print("number =", number)
+
+# %% codecell
+# Prints the provided string, three times.
+# Arguments: `string`: the string to be printed.
+# Return: no return value
+def printThreeTimes(string):
+    for x in range(3):
+        print(string)
+# %% codecell
+printThreeTimes("Foo")
+printThreeTimes("Howdy Bubba. :/")
+# %% codecell
+# Prints the provided string a specific number of times
+# Arguments: `string`: the string to be printed
+#            `times`: the number of times to print the string
+# Return: no return value
+def printNTimes(string, times):
+    for x in range(times):
+        print(string)
+# %% codecell
+printNTimes("Foo", 3)
+printNTimes("Howdy Bubba. :/", 1)
+# %% codecell
+message = "Rally sons of Notre Dame"
+# %% codecell
+# Print a message in a box surrounded by ASCII characters
+# Arguments: `message`: The message to be printed
+#            `border`: The ASCII character to use as the box border
+#            `alignment`: The alignment character to be used in the format string
+#                         "<", "^", or ">"
+# Return: no return value
+def printBox(message, border="^", alignment="^"):
+    length = max([len(word) for word in message.split()])
+    print(border * (length + 4))
+    for word in message.split():
+        print(f"{border} {word:{alignment}{length}} {border}")
+    print(border * (length + 4))
+# %% codecell
+printBox(message, '#', '>')
+# %% codecell
+printBox("It's pumpkin spice season. RUN!!!")
+# %% codecell
+printBox(alignment="<", message="The quick brown fox jumped over the lazy dog.")
+# %% codecell
+# Realize that we have been using this idea of `named arguments`
+# since the beginning, with the `print()` function.
+print("foo", end="")
+print("bar")
+# %% codecell
+print(1,2,"foo",42)
+# %% codecell
+# In addition to the `end` argument, there is also a `sep` argument.
+print(1,2,"foo",42, sep="~~~~~")
+# %% codecell
+
+# %% codecell

@@ -1,0 +1,255 @@
+# %% markdown
+# # Homework 2 (65 Points)
+#
+# ## Due: 09/19/19
+# %% codecell
+### CELL 0 ###
+# Please enter your names here:
+# 1.) Tyler Sims
+# 2.)
+##############
+# %% markdown
+# ## Part 1: Simple math (20 Points)
+#
+# Write a small program that analyzes a list of numbers in a variable called `numbers`, and prints the following statistics:
+# ```
+# Minimum:
+# Maximum:
+# Average:
+# Population Standard Deviation:
+# ```
+# Although there are pre-existing functions (`min()`, `max()`, `mean()`, `pstdev()`) to compute these statistics, you should not use them for this particular problem.  Rather, write your own loops (I suggest `for..in:` loops) to perform the math as needed.  **This is an exercise in writing loops.**
+#
+# If you are unfamiliar with the Standard Deviation, see this Wikipedia article (https://en.wikipedia.org/wiki/Standard_deviation).  If the formal definition is confusing, see the "Basic Examples" section.
+#
+# ### Example Output
+#
+# If `numbers = [1, 3, 5, 7, 9]`, then the output should be as follows:
+#
+# ```
+# Minimum: 1
+# Maximum: 9
+# Average: 5.0
+# Population Standard Deviation: 2.8284271247461903
+# ```
+# %% codecell
+### CELL 1 ###
+# This cell will load values from the well-known Iris dataset.
+# (https://en.wikipedia.org/wiki/Iris_flower_data_set)
+# At this point, don't worry about how it works.  As long as
+# the numbers are loaded correctly, everything will be fine.
+# Please note that the first time that this is run, it may take
+# 10 seconds or so to finish loading.
+from sklearn import datasets
+numbers = [*datasets.load_iris().data[:,0]]
+print('Numbers loaded:', numbers)
+# %% codecell
+### CELL 2 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+##############
+
+
+#########################
+# Code for minimum #
+#########################
+
+mark = 0
+minimum = numbers[0]
+
+while mark < len(numbers):
+    if numbers[mark] <= minimum:
+        minimum = numbers[mark]
+        mark = mark + 1
+    else:
+        mark = mark + 1
+
+#########################
+# Code for maximum #
+#########################
+
+mark = 0
+maximum = numbers[0]
+
+while mark < len(numbers):
+    if numbers[mark] >= maximum:
+        maximum = numbers[mark]
+        mark = mark + 1
+    else:
+        mark = mark + 1
+
+#########################
+# Code for average #
+#########################
+
+average = sum(numbers)/len(numbers)
+
+#################################
+# Code for standard deviation #
+################################
+
+for num in numbers:
+    a = num - average
+    b = a**2
+    c = []
+    c.append(b)
+
+standardDeviation = (sum(c)/len(c))**0.5
+
+print("Minimum:", minimum)
+print("Maximum:", maximum)
+print("Average:", average)
+print("Standard Deviation:", standardDeviation)
+
+# %% markdown
+# ## List Comprehensions (25 Points)
+#
+# Understanding List Comprehensions (and being able to write them) is an important Python skill.  List comprehensions are an elegant way to create a new list, based on an existing sequence (list, range, string, etc.).
+#
+# Here, your job is to re-write a given piece of code to use a single list comprehension.  For example, if the given code is:
+#
+# ```
+# l = []
+# for i in range(0,51,2):
+#     l.append(i)
+# print(l)
+# ```
+# You should write:
+# ```
+# print([i for i in range(0,51,2)])
+# ```
+#
+# Similarly, if the given code is:
+# ```
+# l = []
+# for i in range(11):
+#     l.append(i * 2)
+# print(l)
+# ```
+# You should write:
+# ```
+# print([i * 2 for i in range(11)])
+# ```
+#
+# Obviously, the output for the two versions of code should be identical.
+#
+# Your code should only be **one** line in length.
+# %% codecell
+### CELL 3 ###
+# Part 1.
+# The code given is:
+##############
+myList = []
+for number in range(-100,1,10):
+    myList.append(-number)
+print(myList)
+# %% codecell
+### CELL 4 ###
+# Write your version of Part 1 below.
+##############
+
+print([-number for number in range(-100,1,10)])
+
+# %% codecell
+### CELL 5 ###
+# Part 2.
+# The code given is:
+##############
+repeated = []
+for number in range(31):
+    repeated.append(number % 2)
+print(repeated)
+# %% codecell
+### CELL 6 ###
+# Write your version of Part 2 below.
+##############
+
+print([number % 2 for number in range(31)])
+
+# %% codecell
+### CELL 7 ###
+# Part 3.
+# The code given is:
+##############
+squares = []
+for num in range(13):
+    squares.append(num**2)
+print(squares)
+# %% codecell
+### CELL 8 ###
+# Write your version of Part 3 below.
+##############
+
+print([number ** 2 for number in range(13)])
+# %% codecell
+### CELL 9 ###
+# Part 3.
+# The code given is:
+##############
+letters = []
+for character in "Howdy!":
+    letters.append(character * 3)
+print('--'.join(letters))
+# %% codecell
+### CELL 10 ###
+# Write your version of Part 3 below.
+##############
+
+print('--'.join(character * 3 for character in 'Howdy!'))
+# %% codecell
+### CELL 11 ###
+# Part 3.
+# The code given is:
+##############
+noVowels = []
+for character in "Rally sons of Notre Dame":
+    if character not in "aeiou":
+        noVowels.append(character)
+print(''.join(noVowels))
+# %% codecell
+### CELL 12 ###
+# Write your version of Part 4 below.
+##############
+
+print(''.join([character for character in "Rally sons of Notre Dame" if character not in "aeiou"]))
+# %% markdown
+# ## Part 3: Frame the words (20 Points)
+#
+# Write a small program that takes a string variable called `message` and prints the words, one per line, in a rectangular frame. For example the string `"Hello World in a frame"` gets printed as:
+# ```
+# *********
+# * Hello *
+# * World *
+# * in    *
+# * a     *
+# * frame *
+# *********
+# ```
+#
+# Obviously, you will have to figure out how wide the frame should be, based on the widest word.
+#
+# Remember `"".split()`, `len()`, `max()`, and list comprehensions.
+# %% codecell
+### CELL 13 ###
+# This cell is for instantiating the `message` variable.
+##############
+message = "The more code that you write, the easier Python gets!"
+# %% codecell
+### CELL 14 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+##############
+
+lw = (max(len(x) for x in message.split()))
+width = 6 + lw
+
+print("*" * width)
+
+for word in message.split():
+    if len(word) == lw:
+        print( "* ", word, " *")
+    else:
+        diff = lw - len(word) -1
+        print( "* ", word, " " * diff, " *")
+
+print("*" * width)

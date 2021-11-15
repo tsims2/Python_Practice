@@ -1,0 +1,533 @@
+# %% markdown
+# # Homework 6 - Due December 10th (160 Points)
+#
+#
+# %% codecell
+### CELL 0 ###
+# Please enter your names here:
+# 1.) Tyler Sims
+# 2.)
+##############
+# Note: When submitting your homework, if person #1 submits
+# the Notebook, then person #2 should also include a note in
+# Sakai that their homework was submitted under #1's name.
+# This will help us to make sure that everyone is getting their
+# grade and comments in a timely manner!
+##############
+# %% markdown
+# ## The `Fraction` Class
+#
+# This homework assignment is all about building a fully-functional `Fraction` class.  The class itself will only be defined in one cell (below), but you will see what you need to add to the class, as detailed in each of the following sections.
+# %% codecell
+# Write all of your code in this cell.
+# As you go through the different parts of the assignment,
+# continue to add the required parts to this cell.
+# In the end, your final class may be 100-200 lines long.
+
+import math
+class Fraction:
+    def __init__(self, numerator=0, denominator=1): #This area lets us initialize all the prts of our class
+        self.n = numerator
+        self.d = denominator
+        self.assertSafe()
+        self.fixNegatives()
+        self.reduce()
+    def reduce(self): #This code is used to reduce a given fraction to it simpliest form
+        factor = math.gcd(abs(self.n), (self.d))
+        self.n //= factor
+        self.d //= factor
+    def fixNegatives(self): #This code is used to ensure negative fractions are negative in the numertor and positive frctions have positive numerators and denomentators
+        if self.n < 0 and self.d < 0:
+            self.n = abs(self.n)
+            self.d = abs(self.d)
+        elif self.d < 0:
+            self.d = abs(self.d)
+            self.n = (self.n) * -1
+    def assertSafe(self): #This code is checking fractions to make sure they are in the correct format
+        if self.d == 0:
+            raise Exception("Denominator cannot be 0.")
+        if type(self.n) is not int:
+            raise Exception(f"Numerator is not an int: {self.n}")
+        if type(self.d) is not int:
+            raise Exception(f"Denominator is not an int: {self.d}")
+    def __str__(self):
+        self.assertSafe()
+        wholeNum = abs(self.n) // abs(self.d)
+        remainder = abs(self.n) % self.d
+        if self.n < 0:
+            wholeNum = -wholeNum
+        if abs(wholeNum) > 0 and self.d != 1:
+            return f"{wholeNum} {remainder}/{self.d}"
+        return f"{self.n}/{self.d}"
+    def __repr__(self):
+        self.assertSafe()
+        return f"Fraction({self.n},{self.d})"
+    def __lt__(self, other):
+        if type(other) is int:
+            other = Fraction(other) #for instance, turn 3 into 3/1
+        if type(other) is Fraction:
+            return (self.n/self.d) < (other.n/other.d)
+        return NotImplemented
+    def __le__(self, other):
+        if type(other) is int:
+            other = Fraction(other)
+        if type(other) is Fraction:
+            return (self.n/self.d) <= (other.n/other.d)
+        return NotImplemented
+    def __eq__(self, other):
+        if type(other) is int:
+            other = Fraction(other) #for instance, turn 3 into 3/1
+        if type(other) is Fraction:
+            return (self.n/self.d) == (other.n/other.d)
+        return NotImplemented
+    def __ne__(self, other):
+        if type(other) is int:
+            other = Fraction(other) #for instance, turn 3 into 3/1
+        if type(other) is Fraction:
+            return (self.n/self.d) != (other.n/other.d)
+        return NotImplemented
+    def __ge__(self, other):
+        if type(other) is int:
+            other = Fraction(other) #for instance, turn 3 into 3/1
+        if type(other) is Fraction:
+            return (self.n/self.d) >= (other.n/other.d)
+        return NotImplemented
+    def __gt__(self, other):
+        if type(other) is int:
+            other = Fraction(other) #for instance, turn 3 into 3/1
+        if type(other) is Fraction:
+            return (self.n/self.d) > (other.n/other.d)
+        return NotImplemented
+    def __add__(self, other):
+        "Return self+other"
+        if type(other) is int:
+            other = Fraction(other)
+        if type(other) is Fraction:
+            return Fraction((self.n * other.d) + (self.d * other.n), self.d * other.d)
+        return NotImplemented
+    def __radd__(self, other):
+        return self + other
+    def __iadd__(self, other):
+        self = self + other
+        return self
+    def __sub__(self, other):
+        "Return self-other"
+        if type(other) is int:
+            other = Fraction(other)
+        if type(other) is Fraction:
+            return Fraction((self.n * other.d) - (self.d * other.n), self.d * other.d)
+        return NotImplemented
+    def __mul__(self, other):
+        "Return self*other"
+        if type(other) is int:
+            return self * Fraction(other)
+        if type(other) is Fraction:
+            return Fraction(self.n * other.n, self.d * other.d)
+        return NotImplemented
+    def __truediv__(self, other):
+        "Return self/other"
+        if type(other) is int:
+            other = Fraction(other)
+        if type(other) is Fraction:
+            return Fraction(self.n * other.d, self.d * other.n)
+        return NotImplemented
+    def __radd__(self, other):
+        "Return other+self"
+        return self + other
+    def __rsub__(self, other):
+        "Return other-self"
+        return -(self - other)
+    def __rmul__(self, other):
+        "Return other*self"
+        return self * other
+    def __rtruediv__(self, other):
+        "Return other/self"
+        return Fraction(self.d,self.n) * other
+    def __neg__(self):
+        "Return the negative value"
+        v = Fraction(self.n * -1, self.d)
+        return v
+    def __bool__(self):
+        if self.n == 0 or self.d == 0:
+            return False
+        return True
+    def __float__(self):
+        return float(self.n/self.d)
+    pass
+# %% markdown
+# ## The Basics: A constructor and `str()` and `repr()` support (25 Points)
+#
+# Add the appropriate class methods so that the following code runs correctly.
+#
+# You should not change the code in this cell.
+#
+# Expected output:
+#
+# ```
+# 0/1 2/1 5/7
+# [Fraction(0,1), Fraction(2,1), Fraction(5,7)]
+# ```
+# %% codecell
+# Do not change any code in this cell.
+a = Fraction()
+b = Fraction(2)
+c = Fraction(5,7)
+
+print(f"{a} {b} {c}")
+print([a, b, c])
+# %% markdown
+# ## Consistent Output (15 Points)
+#
+# The `Fraction` class should behave in a very specific way.
+#
+# 1. The numerator and the denominator should always be stored in lowest terms.
+# 2. Only the numerator should be shown as negative.
+# 3. If the fraction is improper, then `str()` should display a mixed number.
+#
+# Modify the class so that this behavior is used.
+#
+# ***Hint: You can create a helper method/function to help you enforce #1 and #2***
+#
+# ***Hint #2: If the negative mixed number is throwing you off, see here http://mathforum.org/library/drmath/view/69479.html (the first result I got when searching for "negative mixed number").***
+#
+# Expected output:
+#
+# ```
+# Creating the fraction 2/4.    It prints as 1/2.     It has repr() Fraction(1,2).
+# Creating the fraction -2/4.   It prints as -1/2.    It has repr() Fraction(-1,2).
+# Creating the fraction 2/-4.   It prints as -1/2.    It has repr() Fraction(-1,2).
+# Creating the fraction -2/-4.  It prints as 1/2.     It has repr() Fraction(1,2).
+# Creating the fraction 7/5.    It prints as 1 2/5.   It has repr() Fraction(7,5).
+# Creating the fraction -5/3.   It prints as -1 2/3.  It has repr() Fraction(-5,3).
+# ```
+# %% codecell
+# Do not change any code in this cell.
+numbers = [(2,4), (-2,4), (2,-4), (-2,-4), (7,5), (-5,3)]
+
+for n,d in numbers:
+    print(f"Creating the fraction {n}/{d}.".ljust(29),f"It prints as {Fraction(n,d)}.".ljust(21),f"It has repr() {repr(Fraction(n,d))}.")
+# %% markdown
+# ## Throw an exception when appropriate. (10 Points)
+#
+# In Python, an object cannot "protect" it's attributes from unauthorized access or modification.  That means that your numerator and denominator might be changed by code other than your own.  Make your code robust by adding a method to your class called `assertSafe()`.  Call your function at the beginning of each of the other methods as needed to ensure that the `Fraction` is always in the proper state.
+#
+# `assertSafe()` should raise an Exception when either the numerator or denominator is not an integer, or when the denominator is 0.  You can see the desired Exception text in the Expected Output below.
+#
+# You should use this `assertSafe()` function in all of your future class methods, as needed, to protect your object.
+#
+# Expected output:
+#
+# ```
+# Trying 1 and 2.
+# 1/2 Fraction(1,2)
+#
+# Trying 3 and -4.
+# -3/4 Fraction(-3,4)
+#
+# Trying 1 and 2.0.
+# Denominator is not an int: 2.0
+#
+# Trying a and 4.
+# Numerator is not an int: a
+#
+# Trying 3 and 0.
+# Denominator cannot be 0
+# ```
+# %% codecell
+# Do not change any code in this cell.
+numbers = [(1,2), (3,-4), (1,2.), ('a',4), (3,0)]
+for n,d in numbers:
+    print(f"Trying {n} and {d}.")
+    try:
+        f = Fraction(n,d)
+        print(f, repr(f))
+    except Exception as e:
+        print(e)
+    print()
+# %% markdown
+# ## Simple Math (20 Points)
+#
+# Now, we need to add some simple math operations.  Your code should support the four basic arithematic operations (+ - * /) with either another `Fraction` object or with an `int`.  If the operand is not either a `Fraction` or an `int`, the proper response is to `return NotImplemented`.
+#
+# All functions should return a `Fraction` object.
+#
+# Remember that the dunder methods in question are `__add__`, `__sub__`, `__mul__`, and `__truediv__`.
+#
+# Expected Output (Notice that, simply by returning `NotImplemented`, Python generates the error message `unsupported operand type(s) for +: 'Fraction' and 'str'`):
+#
+# ```
+# 5/7 + 1/7 = 6/7
+# 5/7 + 1 = 1 5/7
+# 5/7 + 2/3 = 1 8/21
+# 5/7 + 2 = 2 5/7
+# Numerator is not an int: a
+# unsupported operand type(s) for +: 'Fraction' and 'str'
+# ```
+#
+# Once you figure out Addition, then Subtraction, Multiplication, and Division should be trivial, because they all follow the same pattern.
+#
+# Here is the expected output for `-`, `*`, and `/`:
+#
+# ```
+# TESTING SUBTRACTION
+# 5/7 - 1/7 = 4/7
+# 5/7 - 1 = -2/7
+# 5/7 - 2/3 = 1/21
+# 5/7 - 2 = -1 2/7
+# Numerator is not an int: a
+# unsupported operand type(s) for -: 'Fraction' and 'str'
+#
+# TESTING MULTIPLICATION
+# 5/7 * 1/7 = 5/49
+# 5/7 * 1 = 5/7
+# 5/7 * 2/3 = 10/21
+# 5/7 * 2 = 1 3/7
+# Numerator is not an int: a
+# can't multiply sequence by non-int of type 'Fraction'
+#
+# TESTING DIVISION
+# 5/7 / 1/7 = 5
+# 5/7 / 1 = 5/7
+# 5/7 / 2/3 = 1 1/14
+# 5/7 / 2 = 5/14
+# Numerator is not an int: a
+# unsupported operand type(s) for /: 'Fraction' and 'str'
+# ```
+# %% codecell
+# Do not change any code in this cell.
+f = Fraction(5,7)
+numbers = [(1,7), (2,3), ('a',5)]
+print("TESTING ADDITION")
+for n,d in numbers:
+    try:
+        print(f"{f} + {n}/{d} =", f + Fraction(n,d))
+    except Exception as e:
+        print(e)
+    try:
+        print(f"{f} + {n} =", f + n)
+    except Exception as e:
+        print(e)
+print()
+# %% codecell
+# Do not change any code in this cell.
+f = Fraction(5,7)
+numbers = [(1,7), (2,3), ('a',5)]
+print("TESTING SUBTRACTION")
+for n,d in numbers:
+    try:
+        print(f"{f} - {n}/{d} =", f - Fraction(n,d))
+    except Exception as e:
+        print(e)
+    try:
+        print(f"{f} - {n} =", f - n)
+    except Exception as e:
+        print(e)
+print()
+
+print("TESTING MULTIPLICATION")
+for n,d in numbers:
+    try:
+        print(f"{f} * {n}/{d} =", f * Fraction(n,d))
+    except Exception as e:
+        print(e)
+    try:
+        print(f"{f} * {n} =", f * n)
+    except Exception as e:
+        print(e)
+print()
+
+print("TESTING DIVISION")
+for n,d in numbers:
+    try:
+        print(f"{f} / {n}/{d} =", f / Fraction(n,d))
+    except Exception as e:
+        print(e)
+    try:
+        print(f"{f} / {n} =", f / n)
+    except Exception as e:
+        print(e)
+print()
+# %% markdown
+# ## Negation (5 Points)
+#
+# What would a fraction be if you couldn't make it negative?
+#
+# Add support for the negative dunder `__neg__`.
+#
+# Expected output:
+#
+# ```
+# 1, when negated, is -1.
+# 3/5, when negated, is -3/5.
+# -3 3/4, when negated, is 3 3/4.
+# ```
+# %% codecell
+# Do not change any code in this cell.
+a = 1
+b = Fraction(3,5)
+c = Fraction(-15,4)
+
+for a in [1, Fraction(3,5), Fraction(-15,4)]:
+    print(f"{a}, when negated, is {-a}.")
+
+# %% markdown
+# ## Reverse Math Operators (20 Points)
+#
+# Now that you have the standard math operators working, it should be trivial to implement the "reverse" of these methods.  In fact, with a little bit of algebreic manipulation, each of these 4 reverse methods can be written in a single line, using the previously-defined methods to do the heavy lifting.
+#
+# In case you need a reminder, `__add__` will recognize expressions such as `Fraction + 3`, but not `3 + Fraction`.  The dunder `__radd__` will recognize the latter.
+#
+# Expected output:
+#
+# ```
+# TESTING ADDITION
+# 1 + 5/7 = 1 5/7
+# 2 + 5/7 = 2 5/7
+# unsupported operand type(s) for +: 'Fraction' and 'str'
+#
+# TESTING SUBTRACTION
+# 1 - 5/7 = 2/7
+# 2 - 5/7 = 1 2/7
+# unsupported operand type(s) for +: 'Fraction' and 'str'
+#
+# TESTING MULTIPLICATION
+# 1 * 5/7 = 5/7
+# 2 * 5/7 = 1 3/7
+# can't multiply sequence by non-int of type 'Fraction'
+#
+# TESTING DIVISION
+# 1 / 5/7 = 1 2/5
+# 2 / 5/7 = 2 4/5
+# can't multiply sequence by non-int of type 'Fraction'
+# ```
+# %% codecell
+# Do not change any code in this cell.
+print("TESTING ADDITION")
+f = Fraction(5,7)
+numbers = [1,2,'a']
+for n in numbers:
+    try:
+        print(f"{n} + {f} =", n + f)
+    except Exception as e:
+        print(e)
+print()
+
+print("TESTING SUBTRACTION")
+for n in numbers:
+    try:
+        print(f"{n} - {f} =", n - f)
+    except Exception as e:
+        print(e)
+print()
+
+print("TESTING MULTIPLICATION")
+for n in numbers:
+    try:
+        print(f"{n} * {f} =", n * f)
+    except Exception as e:
+        print(e)
+print()
+
+print("TESTING DIVISION")
+for n in numbers:
+    try:
+        print(f"{n} / {f} =", n / f)
+    except Exception as e:
+        print(e)
+print()
+# %% markdown
+# ## Comparison Operators (30 Points)
+#
+# We can support comparision operators `<`, `<=`, `>`, `>=`, `==`, `!=` with dunder methods, too.  You can see the list of them here: https://docs.python.org/3.6/library/operator.html?highlight=__add__#module-operator
+#
+# Notice that you will need to support comparisons with `int`s as well as `Fraction`s.  Of course, as long as you `return NotImplemented` when appropriate, Python is smart enough to be able to handle comparisons such as `int < Fraction` as easily as `Fraction < int`, without any extra work from you.
+#
+# Expected Output:
+#
+# ```
+#             < 1/2     <=-1/2     > 2      >=4/15     ==1       !=1
+# 1/2           0         0         0         1         0         1
+# -1/2          1         1         0         0         0         1
+# 2             0         0         0         1         0         1
+# 4/15          1         0         0         1         0         1
+# 1             0         0         0         1         1         0
+# 1             0         0         0         1         1         0
+# ```
+# %% codecell
+# Do not change any code in this cell.
+numbers = [Fraction(1,2), Fraction(-1,2), 2, Fraction(4,15), Fraction(-3,-3), 1]
+slugs = ["< {}", "<={}", "> {}", ">={}", "=={}", "!={}"]
+width = 10
+print(" " * width, end="")
+print("".join(s.format(v).center(width) for s,v in zip(slugs, numbers)))
+for x in numbers:
+    print(("{:" + str(width) + "}").format(str(x)), end="")
+    print(f"{x < numbers[0]:^{width}}", end="")
+    print(f"{x <= numbers[1]:^{width}}", end="")
+    print(f"{x > numbers[2]:^{width}}", end="")
+    print(f"{x >= numbers[3]:^{width}}", end="")
+    print(f"{x == numbers[4]:^{width}}", end="")
+    print(f"{x != numbers[5]:^{width}}", end="")
+    print()
+# %% markdown
+# ## True and False (5 Points)
+#
+# Of course, it's often very handy to convert a variable to a `True` or `False` value.  The easiest way to do this is to provide a `bool` dunder to perform the conversion when needed.
+#
+# Add a float dunder method so that the type conversion works as expected.
+#
+# Expected Output:
+#
+# ```
+# -1/3 is True
+# -1/6 is True
+# 0/1 is False
+# 1/6 is True
+# 1/3 is True
+# ```
+# %% codecell
+# Do not change any code in this cell.
+f = Fraction(-3,6)
+for x in range(1,6):
+    g = f + Fraction(x,6)
+    if g:
+        print(f"{g} is True")
+    else:
+        print(f"{g} is False")
+# %% markdown
+# ## Fraction to Float (5 Points)
+#
+# Of course, your user may need to print out your number as a float, so you should provide that conversion!
+#
+# Add a `float` dunder method so that the type conversion works as expected.
+#
+# Expected Output:
+#
+# ```
+# 1/3 = 0.3333333333333333
+# 5/7 = 0.7142857142857143
+# 9/11 = 0.8181818181818182
+# -1 1/4 = -1.25
+# 8 = 8.0
+# ```
+# %% codecell
+# Do not change any code in this cell.
+for x,y in ([*zip(range(1,10,4), range(3,12,4))] + [(-5,4), (8,1)]):
+    f = Fraction(x,y)
+    print(f"{f} = {float(f)}")
+# %% markdown
+# ### Documentation (25 Points)
+#
+# Documentation is often the most overlooked part of a coding project, but it is one of the most important.  Think of your own experiences in needing to understand how something works, and perhaps being frustrated by the lack of documentation.
+#
+# We don't want our class to be undocumented.
+#
+# Go through your class definition and add documentation to the class and each method so that someone else using your class will know how to use it.  Use the built-in documentation for `list` as your guide, which can be accessed by running `help(list)`.
+# %% codecell
+# Do not change any code in this cell.
+help(type(Fraction))
+# %% markdown
+# ## Congratulations!
+#
+# You have written a useful class which can do actual, exact math!
+# %% codecell

@@ -1,0 +1,235 @@
+# %% markdown
+# # A few more String functions
+#
+# https://docs.python.org/3.6/library/stdtypes.html#string-methods
+# %% markdown
+# ## Positioning output
+# ```
+# .center
+# .ljust
+# .rjust
+# .zfill
+# ```
+# %% codecell
+# Aligning strings
+print("'" + "Star Trek".center(20) + "'")
+print("'" + "Star Trek".ljust(20) + "'")
+print("'" + "Star Trek".rjust(20) + "'")
+# %% codecell
+# Aligning strings with `format strings`
+title = "Star Trek"
+print(f"'{title:20}'")
+print(f"'{title:<20}'")
+print(f"'{title:^20}'")
+print(f"'{title:>20}'")
+
+# %% codecell
+# Formatting numbers
+print("30".zfill(10))
+print("-30".zfill(10))
+print("3.14159".zfill(10))
+print(type("30".zfill(10)))
+# %% codecell
+num = 30
+print(f"{num}")
+print(f"{num:10}")
+print(f"{num:010}")
+print(f"{-num:010}")
+
+numstring = '30'
+print(f"{numstring:>10}")
+# This will fail because format strings require a
+# number type when using the zero fill option.
+print(f"{numstring:>010}")
+
+# %% markdown
+# # Convert tabs to spaces.
+# .expandtabs
+# %% codecell
+print("\tfoo\tbar\tbaz")
+print("a\tfoo\tbar\tbaz")
+print("ab\tfoo\tbar\tbaz")
+print("abc\tfoo\tbar\tbaz")
+print("abcd\tfoo\tbar\tbaz")
+print("abcde\tfoo\tbar\tbaz")
+print("abcdef\tfoo\tbar\tbaz")
+print("abcdefg\tfoo\tbar\tbaz")
+print("abcdefgh\tfoo\tbar\tbaz")
+print("abcdefghi\tfoo\tbar\tbaz")
+
+# %% codecell
+print("\tfoo\tbar\tbaz")
+print("\tfoo\tbar\tbaz".expandtabs())
+print("\tfoo\tbar\tbaz".expandtabs(2))
+print("\t1\t2\t3\t4".expandtabs(2))
+print("\t1\t2\t3\t4".expandtabs(3))
+print("\t1\t2\t3\t4".expandtabs(4))
+print()
+for i in range(11):
+    print("\t1\t2\t3\t4".expandtabs(i))
+# %% codecell
+message = "The quick brown fox jumps over the lazy dog"
+print(message[2:28:3])
+print([*range(3, 30, 5)])
+print([*range(30, 3, -5)])
+print(message[28 : 2 : -1])
+print(message[::-1])
+print(message[::-2])
+
+# %% markdown
+# # Dictionaries
+# https://docs.python.org/3.6/tutorial/datastructures.html#dictionaries
+#
+# A dictionary is a collection object that allows us to store key-value pairs.  That is, a value can be associated with some identifier, called a key.  In a list, the "key" is the index, starting with 0.  In a dictionary, the key can be anything that we want to use, number or string.
+# %% codecell
+# Creating a dictionary
+d = {"a": 1, "b": 42, "c": "foo", "6": "good", 6: "evil"}
+print(d)
+# %% codecell
+# Accessing a value in the dictionary
+print(d["b"])
+# %% codecell
+# Changing a value in the dictionary
+print(d["b"])
+print("Change d['b']")
+d["b"] = "LOOK AT ME!"
+print(d["b"])
+# %% codecell
+nums = {"a" : 0, "b" : 0}
+# %% codecell
+nums["a"] += 1
+print(nums)
+# %% codecell
+dick = {}
+phrase = "I love dogs. I also love cats. I believe some animals are perfect. I believe tigers are pretty. I believe crocs are dangerous. But I love snakes the best."
+counter = 0
+
+for x in phrase.split():
+    if x not in dick:
+        dick[x] = phrase.split()[counter + 1: counter + 2]
+        counter += 1
+    else:
+        dick[x] = dick[x] + phrase.split()[counter + 1: counter + 2]
+        counter += 1
+
+def guessNext(currentWord):
+    wordCount = {}
+    answer = []
+    for y in dick[currentWord]:
+        if y in wordCount:
+            wordCount[y] += 1
+        else:
+            wordCount[y] = 1
+    for key, value in sorted(wordCount.items(), key=lambda item: item[1], reverse = True):
+        answer.append(key)
+    return answer
+
+print(guessNext('I'))
+
+# %% markdown
+# ## Wizard Of Oz
+# %% codecell
+# This code puts the text of The Wonderful Wizard Of Oz
+# from Project Gutenberg into a string variable called `oz`.
+# The code also saves a copy of the book in a text file on
+# your computer.  The next time that you run the script,
+# it will first try to load the text of the book from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+try:
+    # Assume the file exists.  Try to open it.
+    ozfile = open('oz.txt', 'r', encoding="utf-8")
+except:
+    # The file open() failed.
+    try:
+        # Try to download the file.
+        from urllib.request import urlopen
+        print ("Fetching the file from the interwebs...")
+        response = urlopen("http://www.gutenberg.org/cache/epub/55/pg55.txt")
+        text = response.read().decode("utf-8", errors='ignore')
+
+        # Write the text of the book to a file.
+        ozfile = open('oz.txt', 'w', encoding="utf-8")
+        ozfile.write(text)
+        ozfile.close()
+        ozfile = open('oz.txt', 'r', encoding="utf-8")
+    except:
+        # Something else went wrong.  Do minor cleanup,
+        # then raise another Exception, which will cause
+        # the script to stop running (with an error).
+        if ozfile: ozfile.close()
+        raise Exception("Could not load file.")
+oz = ozfile.read()
+ozfile.close()
+
+print('The Wonderful Wizard of Oz is loaded.  It is %d characters long.' % len(oz))
+print('-' * 80)
+print(oz)
+# %% codecell
+theCount = 0
+ozCount = 0
+for word in oz.lower().split():
+    if word == "the":
+        theCount += 1
+    if word == "oz":
+        ozCount += 1
+print(f"`the` occurs {theCount} time(s)")
+print(f"`oz` occurs {ozCount} time(s)")
+
+# %% codecell
+wordCount = {"oz": 0, "The": 0}
+
+for word in oz.lower().split():
+    if word in wordCount:
+        wordCount[word] += 1
+
+print(wordCount)
+# %% codecell
+wordCount = {}
+
+for word in oz.lower().split():
+    if word not in wordCount:
+        wordCount[word] = 1
+    else:
+        wordCount[word] += 1
+
+print(wordCount)
+# %% codecell
+wordCount = {}
+
+for word in oz.lower().split():
+    if word not in wordCount:
+        wordCount[word] = 0
+    wordCount[word] += 1
+
+print(wordCount)
+# %% codecell
+wordCount = {}
+
+for word in oz.lower().split():
+    if word not in wordCount:
+        wordCount[word] = 0
+    wordCount[word] += 1
+
+#del wordCount["the"]
+lookFor = max(wordCount.values())
+for word in wordCount.keys():
+    if (wordCount[word] == lookFor):
+        print(word)
+# %% codecell
+# Simple code to count the number of occurences of a character in a string.
+characters = {}
+for ch in oz:
+    if ch not in characters:
+        characters[ch] = 0
+    characters[ch] += 1
+print(characters)
+print(characters["A"] + characters['a'])
+
+# Print out the count of all the letters in the alphabet
+import string
+for ch in string.ascii_letters:
+    print(ch + " : " + str(characters[ch]))
+# %% codecell
+print(*range(2,3))
+# %% codecell

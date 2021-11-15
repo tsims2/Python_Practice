@@ -1,0 +1,251 @@
+# %% markdown
+# ## Using Lists with For..in
+# %% codecell
+x = [*range(10)]
+print(x)
+# Each time the code block is executed, `y` will be assigned
+# to the next value in the list.
+for y in x:
+    print(y, y**2, y**3)
+# %% markdown
+# ## Lists can be added to (appended)
+# %% codecell
+# Example of the .append() function on a list
+x = []
+print(x)
+x.append(42)
+print(x)
+x.append(-28)
+print(x)
+# %% codecell
+# Example of the .append() function on a list
+x = []
+print(x)
+x = x + [42]
+print(x)
+x = x + [-28]
+print(x)
+# %% codecell
+# `x` is an empty list
+x = []
+
+# Add elements to the end of `x` using the list `.append()` function
+for y in range(30):
+    if y % 3:
+        x.append(y)
+print(x)
+# %% markdown
+# ## List Comprehensions
+#
+# Python is powerful in how it can quickly and concisely handle lists.  It has special syntax to build lists on the fly.  These are called List Comprehensions.
+# %% codecell
+# Consider this loop to build a list:
+integers = []
+for x in range(10):
+    integers.append(x)
+print(integers)
+# %% codecell
+# The preceding loop to build a list can be
+# shrunk down to a single line, called a
+# list comprehension.
+#
+# The syntax for a list comprehension is:
+# [<expression> for <var> in <sequence>]
+
+print([x for x in range(10)])
+# %% codecell
+print([x * 2 for x in range(10)])
+# %% codecell
+# You can use the <expression> part of the list
+# comprehension in order to build more complex lists.
+print([x**2 for x in range(10)])
+# %% markdown
+# But what if you only want to add some things from a sequence to the list?
+# %% codecell
+oddNumbers = []
+for x in range(10):
+    if x % 2:
+        oddNumbers.append(x)
+print(oddNumbers)
+# %% codecell
+# You can add an `if` to the list comprehension to act
+# as a filter!
+# Notice that there are 3 parts to this particular list
+# comprehension:
+#   1. the <expression>
+#   2. the `for <var> in <sequence>`
+#   3. the `if <condition>`
+# Part 3 will filter the output of part 2, before part 1
+# is evaluated.
+oddNumbers = [x for x in range(10) if x % 2]
+print(oddNumbers)
+# %% codecell
+# Here is an additional example of this extended, 3-part syntax.
+# Notice, in this example, that the list is filtered
+# *before* the `x + 1` is evaluated.
+print([x + 1 for x in range(10) if x % 2])
+# %% codecell
+# Recall this example from earlier:
+for x in "Howdy!":
+    print(x)
+# %% codecell
+# Compare the previous example to this equivalent one:
+print([x for x in "Howdy!"])
+# %% codecell
+# You can do some interesting things.
+# What does this code produce?
+print([x for x in "abracadabra" if x not in "abc"])
+# %% codecell
+# See the behavior of ''.join()
+print('\n'.join([x for x in "abracadabra" if x not in "abc"]))
+# %% markdown
+# ## Do you remember the "splat" operator?
+# %% codecell
+print(range(10))
+# %% codecell
+print([*range(10)])
+# %% codecell
+print([i for i in range(10)])
+# %% markdown
+# Basically, the "splat" operator (`[* <sequence> ]`) is an ultra-shorthand list comprehension!
+# %% codecell
+print("Hello")
+# %% codecell
+print([ch for ch in "Hello"])
+# %% codecell
+print([*"Hello"])
+# %% markdown
+# The following example is just a silly example of how the splat operator and list comprehension are similar.
+# %% codecell
+print([*[1, 2, 3]])
+# %% codecell
+print([x for x in [1, 2, 3]])
+# %% markdown
+# Of course, the splat operator can't modify the list in any way, but the list comprehension can.
+# %% codecell
+print([-x for x in [1, 2, 3]])
+# %% markdown
+# In conclusion, the splat operator and list comprehension both do the job of converting a sequence into a list.
+# %% codecell
+sentence = "It was a dark and stormy night."
+print(sentence)
+print(sentence.upper())
+print([x.upper() for x in sentence.split()])
+print(' '.join(sorted(sentence.upper().split())))
+print()
+print([x for x in sentence.split()])
+print([len(x) for x in sentence.split()])
+# Advanced, please don't worry about it now:
+print(sorted(sentence.split(), key=len))
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+message = "Hey"
+print(message.order())
+# %% codecell
+
+# %% markdown
+# ## Stupid List tricks
+#
+# What will these code snippets produce?
+#
+# Function reference: https://docs.python.org/3.6/library/functions.html
+# %% markdown
+# ### ''.join()
+# %% codecell
+# Of course, you can convert a list into a string.
+# The syntax looks a bit weird, though.
+print("".join(["a", "b", "c"]))
+# %% codecell
+# The "official" term for this joining operation is
+# "concatenation".
+# You can concatenate list entries together using
+# any "glue" string that you want.
+print('---'.join(["a", "b", "c"]))
+# %% codecell
+# Unfortunately, the .join() function requires that
+# the list be a list of string.  That means numbers
+# must be converted to strings in order to be used in
+# this way.  Fortunately, list comprehensions make
+# these types of conversions a breeze!
+
+# The following code will fail:
+numberList = [1, 2, 3, 4]
+print('~'.join(numberList))
+# %% codecell
+# It will work now:
+numberList = [1, 2, 3, 4]
+print('~'.join([str(num) for num in numberList]))
+# %% codecell
+# It will work now:
+numberList = [1, 2, 3, 4]
+print(str(numberList))
+print(type(str(numberList)))
+print()
+print(numberList)
+print(type(numberList))
+
+numString = str(numberList)
+numString = numString + "HOWDY"
+print(numString)
+# %% markdown
+# #### Practice time!
+#
+# Write code to produce the following output:
+# ```
+#         1
+#       1.2
+#     1.2.3
+#   1.2.3.4
+# 1.2.3.4.5
+# ```
+# %% codecell
+for row in range(1, 6):
+    rowString = [*range(1, row+1)]
+    rowString = '.'.join([str(num) for num in rowString])
+    print(f"{rowString:>9}")
+# %% codecell
+for row in range(1, 6):
+    print(f"{'.'.join([str(num) for num in range(1, row+1)]):>9}")
+# %% markdown
+# Remember to check out the Format String specification language!
+#
+#  * https://docs.python.org/3.6/library/string.html#format-specification-mini-language
+# %% markdown
+# ### sorted()
+# %% codecell
+# sorted() returns a new list, and the
+# original is unchanged
+fancyWord = "abracadabra"
+print(fancyWord)
+print(sorted(fancyWord))
+print(fancyWord)
+# %% codecell
+# How could you print a sorted version of
+# "abracadabara" as a string?
+fancyWord = "abracadabra"
+print(''.join(sorted(fancyWord)))
+# %% markdown
+# #### Practice Time!
+#
+# Write a code snippet to test if any words in the list are anagrams of "education".
+#
+# Expected output:
+# ```
+# "auctioned" is an anagram of "education"
+# "cautioned" is an anagram of "education"
+# "earthling" is not an anagram of "education"
+# ```
+# %% codecell
+wordList = ["Auctioned", "cautioned", "earthling"]
+
+for word in wordList:
+    # check if word is anagram of "education"
+    if ''.join(sorted(word.upper())) == ''.join(sorted('education'.upper())):
+        print(f'"{word}" is an anagram of "education"')
+    else:
+        print(f'"{word}" is not an anagram of "education"')
+
+# %% codecell

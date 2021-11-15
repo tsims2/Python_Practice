@@ -1,0 +1,527 @@
+# %% markdown
+# # Exam 2
+# ## Due November 21, 2019, 2:00PM
+# ## (140 Points)
+#
+# General Instructions: All code should be commented appropriately.  Functions should be used as appropriate for readability and de-duplication of code.  While you are not expected to find the optimal solution in every question, grossly inefficient or inelegant code will be penalized.
+#
+# Partial credit is available in some circumstances.
+# %% codecell
+### CELL 0 ###
+#
+# REMEMBER: YOU ARE NOT ALLOWED TO WORK IN GROUPS OF ANY SIZE.
+# ALL QUESTIONS MUST BE SOLVED ENTIRELY ON YOUR OWN!
+#
+# Please enter your name below:
+# 1.) Tyler Sims
+##############
+# %% markdown
+# ## Setup
+#
+# Run the code in the following cell in order to set up the variables used throughout this Exam.
+# %% codecell
+gettysburg_address = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+
+# This function puts the text of some book in text format
+# from a url (e.g., Project Gutenberg) into a string variable.
+# The code also saves a copy of the book in a text file on
+# your computer.  The next time that you run the script,
+# it will first try to load the text of the book from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+def loadBook(filename, url):
+    try:
+        # Assume the file exists.  Try to open it.
+        textFile = open(filename, 'r', encoding="utf-8")
+    except:
+        # The file open() failed.
+        try:
+            # Try to download the file.
+            from urllib.request import urlopen
+            print ("Fetching the file from the interwebs...")
+            response = urlopen(url)
+            text = response.read().decode("utf-8", errors='ignore')
+
+            # Write the text of the book to a file.
+            textFile = open(filename, 'w', encoding="utf-8")
+            textFile.write(text)
+            textFile.close()
+            textFile = open(filename, 'r', encoding="utf-8")
+        except:
+            # Something else went wrong.  Do minor cleanup,
+            # then raise another Exception, which will cause
+            # the script to stop running (with an error).
+            if textFile: textFile.close()
+            raise Exception("Could not load file.")
+    text = textFile.read()
+    textFile.close()
+    return text
+
+warAndPeace = loadBook('warAndPeace.txt', 'http://www.gutenberg.org/files/2600/2600-0.txt')
+print("Done loading War And Peace")
+
+#########################################################
+###    Run This Code To Download And Load The Data    ###
+#########################################################
+
+# This code creates a dataset called `babynames`, which is
+# the dataset on baby names from the Social Security
+# Administration.  Data is organized by state, then year,
+# then gender, then name, and then finally the number of
+# babies born that year with that name.  Names that
+# occurred less than 5 times that year are not included.
+# The code also saves a copy of the dataset in a file on
+# your computer.  The next time that you run the script,
+# it will first try to load the dataset directly from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+from zipfile import ZipFile
+babylist = []
+def readnames(path):
+    babynames = {}
+    with ZipFile(path) as babyzip:
+        for filename in [filename for filename in babyzip.namelist() if ".TXT" in filename]:
+            print("Loading data for " + (filename[:2]))
+            with babyzip.open(filename) as state:
+                for line in [line for line in state.read().decode().splitlines() if line != '']:
+                    state, sex, year, name, count = line.split(',')
+                    babylist.append((state, sex, year, name, count))
+                    year = int(year)
+                    count = int(count)
+                    if state not in babynames:
+                        babynames[state] = {sex:{year:{name:count}}}
+                    elif sex not in babynames[state]:
+                        babynames[state][sex] = {year:{name:count}}
+                    elif year not in babynames[state][sex]:
+                        babynames[state][sex][year] = {name: count}
+                    else:
+                        babynames[state][sex][year][name] = count
+    return babynames
+
+
+babynames = {}
+zipname = "babynames.zip"
+try:
+    # Assume the file exists.  Try to open it.
+    babynames = readnames(zipname)
+except:
+    # The file open() failed.
+    try:
+        # Try to download the file.
+        from urllib.request import urlopen
+        print("Fetching the file from the interwebs...")
+        print("NOTE: This will take a while. The file is around 20 megabytes!  And that's compressed, too!")
+        response = urlopen("https://www.ssa.gov/oact/babynames/state/namesbystate.zip")
+
+        # Write the downloaded data to a file.
+        with open(zipname, 'wb') as babyfile:
+            babyfile.write(response.read())
+        babynames = readnames(zipname)
+    except:
+        # Something else went wrong.
+        # Raise another Exception, which will cause
+        # the script to stop running (with an error).
+        raise Exception("Could not load file.")
+
+total = 0
+for state in babynames:
+    for sex in babynames[state]:
+        for year in babynames[state][sex]:
+            total += len(babynames[state][sex][year])
+print('Baby Names data is loaded.  There are %d records.' % total)
+
+# %% markdown
+# ### Question 1
+# ## Warm-Up: Relatively Prime Numbers
+# ## (30 Points)
+#
+# Relative primes are numbers which do not share any common factors other than 1.  For example, 6 and 15 **are not** relatively prime, because they both have 3 as a factor.  21 and 22, however, **are** relatively prime.
+#
+# You should write code (with appropriate functions) to print out the requested information.
+#
+# Example output would start like this:
+#
+# ```The relative primes between 2 and 10 are:
+# 2 3
+# 2 5
+# 2 7
+# 2 9
+# 3 4
+# 3 5
+# 3 7
+# 3 8
+# 3 10```
+#
+# And so on...
+# %% codecell
+### Question 1 ###
+### Write your code below this line ###
+
+def printRelativePrimes(low, high):
+    for x in range(low, high + 1):
+        for y in range(x, high + 1):
+            if (y % x):
+                if (y % x) == 1:
+                    print((x), (y))
+                if (x % (y % x)):
+                    print((x), (y))
+    return
+
+relativePrimeCount = 0
+for x in range(2, 501):
+        for y in range(x, 501):
+            if (y % x):
+                if (y % x) == 1:
+                    relativePrimeCount += 1
+                if (x % (y % x)):
+                    relativePrimeCount += 1
+
+
+### Do not change the code below this line ###
+print("The relative primes between 2 and 10 are:")
+printRelativePrimes(2, 10)
+print()
+print(f"The total number of relative primes between 2 and 500 is: {relativePrimeCount}")
+# %% markdown
+# ## Question 2
+# ### Substring Count limited by unique characters.
+# ### (20 Points)
+#
+# A substring is a contiguous sequence of characters within a string.  For example, if a string contains the word `boot`, then substrings are: `b`, `bo`, `boo`, `boot`, `o`, `oo`, `oot`, `o`, `ot`, and `t`
+#
+# We will define the *n*-count substring as a substring that contains exactly *n* unique characters.  For example, a *3*-count substring would be `boot`, but not `oot`.  A *2*-count substring would be `bo` and `boo`, but not `oo`.
+#
+# Your task is to write a function (`ncount()`) which takes a string and a value for *n* and calculates how many *n*-count substrings that the string contains.
+#
+# For this exercise, every character in the string should be treated equally.
+# %% codecell
+### Question 2 ###
+### Write your code below this line ###
+def ncount(message, n):
+    substring = []
+    nsubstring = {}
+    answer = " "
+
+    # This code puts all substrings of a message into a substring list.
+    for firstCharacter in range(len(message) + 1):
+        for lastCharacter in range(len(message) + 1):
+            substring.append(message[firstCharacter:lastCharacter])
+
+    # This code looks at each substring, determines its unique character count, and assings that count to the substring in a dictionary.
+    for nsub in substring:
+        count = 0
+        check = []
+        for character in nsub:
+            if character not in check:
+                count += 1
+                check.append(character)
+            nsubstring[nsub] = count
+
+    # this code picks out substrings that have the unique character count we are looking for and puts them in the string answer.
+    for nsub in nsubstring:
+        if nsubstring[nsub] == n:
+            answer = answer + " " + nsub
+    return answer
+
+### Do not change the code below this line ###
+print(ncount('boot', 1))
+print(ncount('boot', 2))
+print(ncount('boot', 3))
+print(ncount('boot', 4))
+print(ncount(gettysburg_address, 5))
+print(ncount(gettysburg_address, 10))
+print(ncount(gettysburg_address, 30))
+# %% markdown
+# ## Question 3
+# ### Predictive Typing
+# ### (30 Points)
+#
+# When you type a word on your phone or computer, it is common for the software to try to guess what you want to type next.  This could even be called a rudimentary form of Artificial Intelligence!
+#
+# You are going to build a simple AI that will guess which word someone will type next.
+#
+# You will write a function `guessNext()` which, when given a word, will return a list of suggestions, ordered by how often the AI has seen that combination of words.  Of course, you need to "teach" your AI what word patterns are common, so let's use Leo Tolstoy's novel __War and Peace__, which was downloaded in the **Setup** code at the beginning of the exam, and has been made available to you in the varaible `warAndPeace`.
+#
+# Lucky for us, Python makes this kind of AI easy to build!
+#
+# Constraints:
+#
+# * `predict` is declared as a `dict`, but it is empty.  You should go through the words of `warAndPeace` and assemble the `predict` object.
+# * `predict` is a `dict`, which means that you should think of it as a `key` and `value` pair.  The `key` should be the current word, but you must decide what goes in the `value` part.  Remember the overall goal: to suggest which word might be coming next.
+# * If there is no prediction (e.g., the AI has never seen that word before), then the AI should return an empty list.
+# * While we have done a lot of work in the past on sanitizing input, do not worry about that at this point.  You do not have to remove any boilerplate, change the case, or do any other filtering of the data.
+# * As stated above, the list returned by `guessNext()` should be sorted based on which words have been seen the most often.
+#     * For example, if the AI has seen `"Both the dog and the cat were happy, but the dog was happier."`, and then `guessNext()` is given the word `the`, then the list that is returned should be `["dog", "cat"]`.
+#         * ("the dog" appears twice, but "the cat" only appears once)
+#     * Notice that we do not return a count of how often the words have been used.
+#     * The order may be arbitrary for words which have the same number of occurrences.
+# %% codecell
+### Question 3 ###
+### Write your code below this line ###
+
+# Build your prediction AI.
+predict = {}
+count = 0
+
+# This code builds a dictionary that stores all words that follow any given word.
+for word in warAndPeace:
+    if word not in predict:
+        predict[word] = warAndPeace[count + 1: count + 2]
+        count += 1
+    else:
+        predict[word] = predict[word] + warAndPeace[count + 1: count + 2]
+        count += 1
+
+def guessNext(currentWord):
+    wordCount = {}
+    answer = []
+    for word in predict[currentWord]:
+        if word in wordCount:
+            wordCount[word] += 1
+        else:
+            wordCount[word] = 1
+    for key, value in sorted(wordCount.items(), key=lambda item: item[1], reverse = True):
+        answer.append(key)
+    return answer
+
+
+# I could not get this code to print due to this error: IOPub data rate exceeded.
+# I can run my code with a shorter list without problem. See bellow Question 4.
+
+
+### Do not change the code below this line ###
+print('Suggestions for "The" (limited to 10):')
+print(guessNext("The")[:10])
+print()
+print('Suggestions for "the" (limited to 20):')
+print(guessNext("the")[:20])
+print()
+print('Suggestions for "Princess" (limited to 8):')
+print(guessNext("Princess")[:8])
+print()
+print('Suggestions for "scarecrow" (limited to 10):')
+print(guessNext("scarecrow")[:10])
+# %% markdown
+# ## Question 4
+# ### Babynames
+# ### (60 Points)
+#
+# The babynames dataset is available to you in the variable `babynames`.  It's structure (which you have seen many times in class) is `babynames[state][sex][year][name] = count`.
+#
+# Your goal is to write whatever functions are necessary in order for you to answer the following questions about the data.  You may, of course, intersperse your code with the prompts that appear below.
+#
+# For convenience, you have been provided with variables to populate for each part of the question.  See the end of the cell for the explanation of what is being asked for in each part and how the variable will be used.
+# %% codecell
+### Question 4 ###
+### Write your code below this line ###
+
+### Question 4A ###
+# What were the 10 most popular female names in the years 1910-1919?
+
+list4a = []
+answer = []
+nameCount = {}
+year = range(1910,1920)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["F"][y]:
+            if name not in nameCount:
+                nameCount[name] = 1
+            else:
+                nameCount[name] += 1
+for key, value in sorted(nameCount.items(), key=lambda item: item[1], reverse = True):
+    answer.append(key)
+list4a = answer[:10]
+
+### Question 4B ###
+# Of the 100 most popular male names in the years 1910-1919, which of these names are among the top 100 male names in the years 2000-2009?
+# Sort them in order of decreasing popularity from the years 2000-2009.
+
+list4b = []
+answer1 = []
+nameCount1 = {}
+year = range(1910,1920)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["M"][y]:
+            if name not in nameCount1:
+                nameCount1[name] = 1
+            else:
+                nameCount1[name] += 1
+for key, value in sorted(nameCount1.items(), key=lambda item: item[1], reverse = True):
+    answer1.append(key)
+    answer1 = answer1[:100]
+#This code picks out the top 100 names from 1910 to 1919 in decending order.
+
+answer2 = []
+nameCount2 = {}
+year = range(2000,2010)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["M"][y]:
+            if name not in nameCount2:
+                nameCount2[name] = 1
+            else:
+                nameCount2[name] += 1
+for key, value in sorted(nameCount2.items(), key=lambda item: item[1], reverse = True):
+    answer2.append(key)
+    answer2 = answer2[:100]
+#This code picks out the top 100 names from 2000 to 2009 in decending order.
+
+for name in answer1:
+    if name in answer2:
+        list4b.append(name)
+#This code checks to see what names from 1910-1919 made it to 2000-2009.
+
+### Question 4C ###
+# Of all the boy names that are common to both decades (1910-1919 and 2000-2009), which name has risen the most in popularity?
+# Of all the girl names that are common to both decades (1910-1919 and 2000-2009), which name has risen the most in popularity?
+
+
+##############For the boys##############
+nameCount1 = {}
+year = range(1910,1920)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["M"][y]:
+            if name not in nameCount1:
+                nameCount1[name] = 1
+            else:
+                nameCount1[name] += 1
+#This code picks out all names from 1910 to 1919 in decending order for men.
+
+nameCount2 = {}
+year = range(2000,2010)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["M"][y]:
+            if name not in nameCount2:
+                nameCount2[name] = 1
+            else:
+                nameCount2[name] += 1
+#This code picks out all names from 2000 to 2009 in decending order for men.
+
+for key in nameCount1:
+    if key in nameCount2:
+        nameCount1[name] = nameCount1[name] + nameCount2[name]
+
+###### For Girls######
+
+nameCount1g = {}
+year = range(1910,1920)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["F"][y]:
+            if name not in nameCount1g:
+                nameCount1g[name] = 1
+            else:
+                nameCount1g[name] += 1
+#This code picks out all names from 1910 to 1919 in decending order for men.
+
+nameCount2g = {}
+year = range(2000,2010)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state]["F"][y]:
+            if name not in nameCount2g:
+                nameCount2g[name] = 1
+            else:
+                nameCount2g[name] += 1
+#This code picks out all names from 2000 to 2009 in decending order for men.
+
+for name in nameCount1g:
+    if name in nameCount2g:
+        nameCount1g[name] = nameCount1g[name] + nameCount2g[name]
+
+boyName4c = max(nameCount1.items(), key=lambda item: item[1])
+girlName4c = max(nameCount1g.items(), key=lambda item: item[1])
+
+### Question 4D ###
+# Which state had the most births recorded in the years 1910-1915, and how many births was it?
+# Which state had the most births recorded in the years 2010-2015, and how many births was it?
+
+stateScore = {}
+year = range(1910,1915)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state][sex][y]:
+            if state not in stateScore:
+                stateScore[state] = 1
+            else:
+                stateScore[state] += 1
+answer = max(stateScore.items(), key=lambda item: item[1])
+
+year = range(2000,2010)
+
+for state in babynames:
+    for y in year:
+        for name in babynames[state][sex][y]:
+            if state not in stateScore:
+                stateScore[state] = 1
+            else:
+                stateScore[state] += 1
+answer2 = max(stateScore.items(), key=lambda item: item[1])
+
+stateEarly4d = answer[0]
+numberEarly4d = answer[1]
+stateLate4d = answer2[0]
+numberLate4d = answer2[1]
+
+### Do not change the code below this line ###
+print("What were the 10 most popular female names in the years 1910-1919?")
+print("The list is:", list4a)
+print()
+print("Of the 50 most popular male names in the years 1910-1919, which of these names are among the top 50 male names in the years 2000-2009?")
+print("Sort them in order of decreasing popularity from the years 2000-2009.")
+print("The list is:", list4b)
+print()
+print("Of all the boy names that are common to both decades (1910-1919 and 2000-2009), which name has risen the most in popularity?")
+print("They boy name that has risen the most in popularity is:", boyName4c)
+print("Of all the girl names that are common to both decades (1910-1919 and 2000-2009), which name has risen the most in popularity?")
+print("They girl name that has risen the most in popularity is:", girlName4c)
+print()
+print("Which state had the most births recorded in the years 1910-1915, and how many births was it?")
+print(f"{stateEarly4d} had {numberEarly4d} births in 1910-1915.")
+print("Which state had the most births recorded in the years 2010-2015, and how many births was it?")
+print(f"{stateLate4d} had {numberLate4d} births in 2010-2015.")
+
+# %% codecell
+### Code for Question 4 ###
+predict = {}
+count = 0
+warAndPeace = "love dog love dog love cat love rabbit hate pig dog bark cow moo love cow dog dog love rabbit"
+warAndPeace = warAndPeace.split()
+
+for word in warAndPeace:
+    if word not in predict:
+        predict[word] = warAndPeace[count + 1: count + 2]
+        count += 1
+    else:
+        predict[word] = predict[word] + warAndPeace[count + 1: count + 2]
+        count += 1
+
+print(predict)
+
+def guessNext(currentWord):
+    wordCount = {}
+    answer = []
+    for word in predict[currentWord]:
+        if word in wordCount:
+            wordCount[word] += 1
+        else:
+            wordCount[word] = 1
+    for key, value in sorted(wordCount.items(), key=lambda item: item[1], reverse = True):
+        answer.append(key)
+    return answer
+
+
+guessNext('love')
+# %% codecell

@@ -1,0 +1,125 @@
+# %% markdown
+# # Lambda functions
+#
+# A lambda function is a **small** function without a name.
+#
+# A lambda function can have multiple arguments, but only one expression as the function body.
+#
+# https://www.w3schools.com/python/python_lambda.asp
+#
+# %% codecell
+def transform(q):
+    return q, q**2, q**3, q**4
+
+newlist = []
+l = [*range(10)]
+for number in l:
+    newentry = transform(number)
+    newlist.append(newentry)
+print(newlist)
+# %% codecell
+print([transform(x) for x in range(10)])
+# %% codecell
+print([*map(transform, range(10))])
+# %% codecell
+t = transform
+# %% codecell
+print(t(3))
+# %% codecell
+print(t(-7.5))
+# %% codecell
+x = 42
+print(x)
+# %% codecell
+print(42)
+# %% codecell
+def transform(q):
+    return q, q**2, q**3, q**4
+
+trans = lambda q: (q, q**2, q**3, q**4)
+print(trans(10))
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+## lambda functions
+
+#def transform(q):
+#    return (q, q**2, q**3, q**4)
+
+# This code is equivalent to the previous (now commented out) function definition.
+transform = lambda q: (q, q**2, q**3, q**4)
+
+newlist = []
+l = [*range(10)]
+for number in l:
+    newentry = transform(number)
+    newlist.append(newentry)
+print(newlist)
+# %% codecell
+# using the `transform` function in `map()`
+transform = lambda q: (q, q**2, q**3, q**4)
+
+print([*map(transform, range(10))])
+# %% codecell
+# further condensing the code, by using the lambda function directly
+print([*map(lambda q: (q, q**2, q**3, q**4), range(10))])
+# %% codecell
+def transform(q):
+    return q, q**2, q**3, q**4
+
+def myfilter(item):
+    total = item[0] + item[1] + item[2] + item[3]
+    if total % 4 == 0:
+        return True
+    else:
+        return False
+
+print([transform(x) for x in range(10) if myfilter(transform(x))])
+print([*filter(myfilter, map(transform, range(10)))])
+print([*filter(myfilter, map(lambda q: (q, q**2, q**3, q**4), range(10)))])
+# %% codecell
+def ismultipleoffour(x):
+    return not x % 4
+print([transform(x) for x in range(10) if not (x % 4)])
+print([*map(transform, filter(ismultipleoffour, range(10)))])
+# %% codecell
+def myfilter(item):
+    total = item[0] + item[1] + item[2] + item[3]
+    if total % 4 == 0:
+        return True
+    else:
+        return False
+
+# Ternary expression:
+# __value__ if __expression__ else __expression__
+def myfilter(item):
+    total = item[0] + item[1] + item[2] + item[3]
+    return True if total % 4 == 0 else False
+
+
+def myfilter(item):
+    return True if (item[0] + item[1] + item[2] + item[3]) % 4 == 0 else False
+
+lambda item: True if (item[0] + item[1] + item[2] + item[3]) % 4 == 0 else False
+
+
+# %% codecell
+def transform(q):
+    return q, q**2, q**3, q**4
+
+def myfilter(item):
+    total = item[0] + item[1] + item[2] + item[3]
+    if total % 4 == 0:
+        return True
+    else:
+        return False
+
+print([transform(x) for x in range(10) if myfilter(transform(x))])
+print([*filter(myfilter, map(transform, range(10)))])
+print([*filter(myfilter, map(lambda q: (q, q**2, q**3, q**4), range(10)))])
+# This is where you would put a comment!
+print([*filter(lambda item: True if (item[0] + item[1] + item[2] + item[3]) % 4 == 0 else False, \
+               map(lambda q: (q, q**2, q**3, q**4), range(10)))])
+# %% codecell

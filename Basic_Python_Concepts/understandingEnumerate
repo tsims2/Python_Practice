@@ -1,0 +1,341 @@
+# %% markdown
+# ## Understanding enumerate()
+# %% codecell
+# The point of this code is to walk you through the concept of what the enumerate()
+# function does.  That is, it returns a list, in which each row contains a tuple
+# with two elements.  The first number in the tuple is the index from the original
+# list.  The second value is the corresponding value from the original list.
+import string
+print(string.ascii_lowercase)
+lowalpha = [*string.ascii_lowercase]
+print(lowalpha)
+print([*enumerate(lowalpha)])
+
+# %% codecell
+message = "Hello World!"
+for entry in enumerate(message):
+    print(entry)
+    if entry[1] == 'l':
+        print(f"Found an 'l' at position {entry[0]}")
+# %% codecell
+message = "Hello World!"
+for (index, ch) in enumerate(message):
+    if ch == 'l':
+        print(f"Found an 'l' at position {index}")
+# %% codecell
+numlist = [[0, 42], [67543, -987654]]
+for entry in numlist:
+    print(entry)
+# %% codecell
+numlist = [[0, 42], [67543, -987654]]
+for [num1, num2] in numlist:
+    print(num1, num2)
+# %% markdown
+# ## Destructuring
+# Destructuring is a syntax tool that Python provides.  Notice how, in the example, that `x` and `y` are given values from the corresponding places in the sequence on the other sign of the equal sign.
+# %% codecell
+# Destructuring example
+(x, y) = (1,2)
+print("x =", x)
+print("y =", y)
+
+# %% codecell
+# Remember, the parenthesis are not required for tuple.
+x, y = 42, -5678
+print("x =", x)
+print("y =", y)
+x, y = y, x
+print("Exchanging x and y")
+print("x =", x)
+print("y =", y)
+# %% codecell
+# example of switching variable values the old way....
+# ... with a temp variable!
+# UGLY!!!
+x = 3
+y = 5
+print(x, y)
+temp = y
+y = x
+x = temp
+print(x, y)
+# %% codecell
+# example of the fibonacci function using tuple destructuring
+def fib(n):
+    a, b = 1, 1
+    for i in range(n-1):
+        a, b = b, a + b
+    return b
+
+
+for i in range(10):
+    print (fib(i))
+# %% codecell
+# This code puts the text of The Wonderful Wizard Of Oz
+# from Project Gutenberg into a string variable called `oz`.
+# The code also saves a copy of the book in a text file on
+# your computer.  The next time that you run the script,
+# it will first try to load the text of the book from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+try:
+    # Assume the file exists.  Try to open it.
+    ozfile = open('oz.txt', 'r', encoding="utf-8")
+except:
+    # The file open() failed.
+    try:
+        # Try to download the file.
+        from urllib.request import urlopen
+        print ("Fetching the file from the interwebs...")
+        response = urlopen("http://www.gutenberg.org/cache/epub/55/pg55.txt")
+        text = response.read().decode("utf-8", errors='ignore')
+
+        # Write the text of the book to a file.
+        ozfile = open('oz.txt', 'w', encoding="utf-8")
+        ozfile.write(text)
+        ozfile.close()
+        ozfile = open('oz.txt', 'r', encoding="utf-8")
+    except:
+        # Something else went wrong.  Do minor cleanup,
+        # then raise another Exception, which will cause
+        # the script to stop running (with an error).
+        if ozfile: ozfile.close()
+        raise Exception("Could not load file.")
+oz = ozfile.read()
+ozfile.close()
+
+print('The Wonderful Wizard of Oz is loaded.  It is %d characters long.' % len(oz))
+print('-' * 80)
+print(oz)
+# %% codecell
+# Example using tuple destructuring with a for..in: loop and enumerate()
+for index, word in enumerate(oz.split()):
+    if word.upper() == "SILVER":
+        print(index, word)
+# %% codecell
+# Example of using enumerate() to get the index and value of a list.  This is a
+# powerful and often-used feature in Python!
+lowalpha = [*string.ascii_lowercase]
+for x, y in enumerate(lowalpha):
+    print(x, y)
+# %% codecell
+
+# %% markdown
+# # Strings
+# This lecture will be an overview of many different string operations available in Python 3.  As always, consult the official documentation to learn more about any particular function.
+#
+# https://docs.python.org/3.6/library/stdtypes.html#text-sequence-type-str
+# %% codecell
+# Difference between addition of numbers and addition of strings.
+print(3 + 3)
+print("3" + "3")
+# %% codecell
+# Difference between addition of numbers and addition of strings.
+print(3 - 3)
+print("3" - "3")
+# %% markdown
+# ## Testing/Inspecting the contents of a string
+# ```
+# in
+# .count()
+# .startswith()
+# .endswith()
+# ```
+# %% codecell
+# The `in` keyword as often used with for..in: syntax
+# This example shows a string being built by adding individual
+# characters to an existing string.
+import string
+print(string.ascii_lowercase)
+sentence = "The quick brown fox jumps over the lazy dog."
+newsentence = ""
+for c in sentence:
+    if c not in string.ascii_lowercase:
+        newsentence += c
+print(f"`{newsentence}`")
+# %% codecell
+# Using `in` as a boolean (true/false) test.
+title = "Star Wars"
+print("a" in title)
+print("Z" in title)
+print("War" in title)
+print("war" in title)
+# %% codecell
+print("slipper" in oz.lower())
+# %% codecell
+# .startswith() and .endswith() examples
+title = "Star Wars"
+print(title.startswith("Star"))
+print(title.startswith("War"))
+print(title.endswith("War"))
+print(title.endswith("Wars"))
+# %% codecell
+# .count() reports the number of times the substring appears
+# in the main string, non-overlapping.
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.count("the"))
+s2 = "a" * 50
+print(s2)
+print(s2.count("aaa"))
+# %% codecell
+print(oz.upper().count("OZ"))
+# %% codecell
+
+# %% codecell
+# .splitlines()
+#print([*enumerate(oz.splitlines())])
+
+oztext = "\n".join(oz.splitlines()[137:9524])
+print(oztext)
+# %% codecell
+
+# %% codecell
+
+# %% markdown
+# ## Locating something within a string
+# ```
+# .find()
+# .index()
+# .rfind()
+# .rindex()
+# ```
+# The main difference is that `.find()` returns a -1 if it fails, but `.index()` throws an exception.
+# %% codecell
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.find("The"))
+print(sentence.find("the"))
+print(sentence.find("the", 1))
+print(sentence.split()[1:2])
+
+print(sentence.find("quick"))
+print(sentence.find("HEY"))
+# %% codecell
+# Comparing the .index() function to the (previously demonstrated) .find()
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.index("the"))
+print(sentence.index("the", 1))
+print(sentence[32:])
+
+print(sentence.index("quick"))
+print(sentence.index("HEY"))
+# %% markdown
+# ## Replacing characters within a string.
+# ```
+# .replace()
+# ```
+# %% codecell
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.replace("fox", "................."))
+# %% codecell
+# Notice that .replace() does not change the sentence itself,
+# because strings are immutable!
+print(sentence)
+print("Changing the `sentence` variable.")
+sentence = sentence.replace("fox", ".................")
+print(sentence)
+# %% markdown
+# ## Breaking up and joining together strings.
+# ```
+# .join()
+# .split()
+# .rsplit()
+# .splitlines()
+# .partition()
+# .rpartition()
+# ```
+# %% codecell
+# Just a quick note.  The back slash is used to "escape"
+# a character in quotes.  It is often used to print a newline
+# in the middle of a string.
+print("abc\"")
+# %% codecell
+# Of course, if you wrap the string using a different style of
+# quotes, then the situation may be avoidable altogether!
+print('abc"')
+# %% codecell
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence)
+print(sentence.splitlines())
+print('-' * 50)
+# Notice the newline after the word "fox".
+sentence = "the quick brown fox\njumps over the lazy dog."
+print(sentence)
+print(sentence.splitlines())
+print('-' * 50)
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence)
+print('\n'.join(sentence.split()))
+# %% codecell
+mySpecialGlue = '----'
+print(mySpecialGlue.join(['A', 'B', 'C']))
+# %% codecell
+# See how .split() behaves as you pass it different arguments
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.split())
+print(sentence.split("o"))
+print(sentence.split("o", 2))
+# %% codecell
+print("X".join(["hi", "bye"]))
+# %% codecell
+sentence = "the quick brown fox                                      jumps over the lazy dog."
+print('-'.join(sentence.split()))
+# %% codecell
+sentence = "the quick brown fox jumps over the lazy dog."
+print(sentence.partition('o'))
+# %% codecell
+# Use tuple destructuring to assigne values to `first`,
+# `middle`, and `last`, simultaneously.
+first, middle, last = sentence.partition('o')
+print(first)
+print(middle)
+print(last)
+# %% markdown
+# # Letter case functions (uppercase/lowercase)
+# ```
+# .upper()
+# .lower()
+# .swapcase()
+# .title()
+# ```
+# %% codecell
+# Notice how the sentence responds to the different commands.
+sentence = "The quick brown fox jumps over the lazy dog."
+print(sentence.upper())
+print(sentence.lower())
+print(sentence.swapcase())
+print(sentence.title())
+print('*' * 50)
+# Notice that you can chain together functions.
+print(sentence.title().swapcase().split())
+# %% markdown
+# ## Remove whitespace from a string
+# ```
+# .strip()
+# .lstrip()
+# .rstrip()
+# ```
+# %% codecell
+# Notice the difference in output.
+sentence = "   The quick brown fox jumps over the lazy dog.            "
+print("'" + sentence.strip() + "'")
+print("'" + sentence.lstrip() + "'")
+print("'" + sentence.rstrip() + "'")
+# %% markdown
+# ## The is... functions
+# ```
+# .isalnum()
+# .isalpha()
+# .isdecimal()
+# .isdigit()
+# .islower()
+# .isnumeric()
+# .isprintable()
+# .isspace()
+# .istitle()
+# .isupper()
+# ```
+# %% codecell
+sentence = "The quick brown fox jumps over the lazy dog."
+print(sentence.isalnum())
+print(''.join([ch for ch in sentence if ch in string.ascii_letters]).isalnum())
+# %% codecell

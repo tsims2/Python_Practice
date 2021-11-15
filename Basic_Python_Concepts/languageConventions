@@ -1,0 +1,269 @@
+# %% markdown
+# # Basic Python (Language Conventions)
+# %% markdown
+# ## Comments
+# %% codecell
+# I am a comment
+
+"""
+I am a multi-line comment.
+I'm not really a "comment" per-se, but Python does not support
+multi-line comments, so I'm the best that you get.
+If I'm not really a comment, then what am I?  Well, I'm actually
+a multi-line string that Python evaluates, and then ignores,
+because nothing is being done with the string.
+"""
+
+# The only alternative is to put a pound at the beginning of each line.
+# This is a pound sign --> #
+# No, it's not a "hashtag".
+# It was called "pound" LONG before "hashtag" was even though about...
+# by about a century!
+
+# %% markdown
+# ## Variables and Types
+#  * Variables are a "storage location" for holding some value which can be used by a Python script.
+#  * The contents of a variable is referred to as its "data".
+#  * All data has some "type" associted with it.
+#  * There are **many** different data types.
+#    * https://docs.python.org/3/library/datatypes.html
+#  * We will focus on a few "core" data types.
+# %% codecell
+# Numbers: Int and Float
+i = 3
+print("i is of type: ", type(i))
+j = 3.0
+print("j is of type: ", type(j))
+# %% codecell
+# Python is "weakly typed", meaning a variable
+# can change its type
+i = 3
+print("i is of type: ", type(i))
+i = i + .5
+print("i is of type: ", type(i))
+# %% codecell
+# A string is a sequence of characters (letters, numbers, symbols, etc.)
+s = "Hello world!"
+print(s)
+# %% codecell
+myFirstName = "Corey"
+myLastName = "Pennycuff"
+myName = myFirstName + " " + myLastName
+print(myName)
+print(myName * 3)
+# %% codecell
+# Boolean operators
+# These are "logical" values, True and False
+# We will discuss them in more detail later.
+print("\"True\" is of type: ", type(True))
+myLogicalVariable = True
+
+print(myLogicalVariable)
+print('with a not:', not myLogicalVariable)
+print('with a not not:', not not myLogicalVariable)
+print('True and True:', True and True)
+print('True and False:', True and False)
+print('True or True:', True or True)
+print('True or False:', True or False)
+print("3: ", bool(3))
+print("0: ", bool(0))
+print("-1:", bool(-1))
+# %% markdown
+# There are also container types (List, Dict, Tuple) which we will cover later.
+# %% markdown
+# ## Printing Stuff
+# * The `print()` function will output the value passed to it.
+#   * In Python 2, `print` is a statement, not a function.
+# * `print()` can accept a "string" (an ordered list of characters)
+# * The old way to format strings:
+#     * A string can include formatting instructions to embed other values within the format string.  It's form is a string, followed by a `%`, followed by either a single value or an ordered list of values.
+#       * https://docs.python.org/3.7/library/stdtypes.html#printf-style-string-formatting
+#       * `%d` is for digits, `%f` for floating point numbers, and `%s`for other strings
+#       * `%` cannot be printed unless it is escaped, written as `%%`
+#       * See the documentation for many more options.
+# * The new way uses "format" strings
+#   * https://docs.python.org/3.7/library/string.html#format-string-syntax
+#   * https://www.python-course.eu/python3_formatted_output.php
+# * Single quotes (`'`) work, so do double quotes (`"`), so do multi-line strings (`"""`)
+# * Each `print()` statement is followed by a newline, unless expressly overridden.
+# %% codecell
+# Printing a String
+print("foo")
+print("foo bar baz")
+# %% codecell
+# Integer versus a Float
+x = 42.5
+print(x)
+print("=== Old Formatting ===")
+print("%d" % x) # print as Int
+print("%f" % x) # print as Float
+print("=== New Formatting ===")
+print("{}".format(int(x))) # print as Int
+print("{}".format(x))      # print as Float
+print("=== New Formatting, Shorter Format ===")
+print(f"{int(x)}")
+print(f"{x}")
+# %% codecell
+# Multiple arguments
+x = 42.5
+print("%d is an %s, %f is a %s" % (x, type(int(x)), x, type(x)))
+print("{} is an {}, {} is a {}".format(int(x), type(int(x)), x, type(x)))
+print(f"{int(x)} is an {type(int(x))}, {x} is a {type(x)}")
+# %% codecell
+# Escaping the `%` (when necessary)
+print(".3 is the same as 30%")
+print("%f is the same as 30%%" % .3)
+# also, escaping "{" and "}"
+x = 3
+print(f"{{      x     }}")
+# %% codecell
+# Getting rid of the automatic newline
+print("This text will ", end="")
+print("all appear ", end="")
+print("on the same line!")
+print("This text will ")
+print("all appear ")
+print("on different lines!")
+# %% codecell
+# Quotes
+print("I contain 'single' quotes")
+print('What do you \'mean\'?')
+print("Nothing.  I \"promise\"!")
+print('''I don't think that either of you
+are trustworthy!
+
+''')
+print("""Me
+%s
+!""" % "either")
+# %% markdown
+# ## Arithmetic operators
+# * Standard operators: `+ - *`
+#  * Note: Division (`/`) behaves differently in Python 3 vs Python 2.
+#    * Python 2 treats `/` as integer division, unless floats are specified.
+#    * Python 3 treats `/` as float division.
+#  * `//` is integer division in both Python 2 and 3
+#  * `%` is modulo, and returns an integer
+#  * `**` is exponentiation, not `^`!
+# * Order of operations, when in doubt, use parenthesis!
+# %% codecell
+print ("3 / 2 = %f" % (3 / 2))
+print ("3 // 2 = %f" % (3 // 2))
+# %% codecell
+print ("3 + 2 = %d" % (3 + 2))
+print ("7 - 13 = %d" % (7 - 13))
+# %% codecell
+# Notice the difference between %d and %f
+print ("8 * .4 = %d" % (8 * .4))
+print ("8 * .4 = %f" % (8 * .4))
+# %% codecell
+print ("8 // 3 = %d" % (8 // 3))
+# % is the "modulus" (e.g., the "remainder")
+print ("278 %% 13 = %d" % (278 % 13))
+# %% codecell
+# Fancy formatting
+import math
+print ("This number (%f) is pi." % math.pi)
+print ("This number (%.3f) is pi." % math.pi)
+print ("This number (%10.3f) is pi." % math.pi)
+print ("This number (%010.3f) is pi." % math.pi)
+print ("This number (%+010.3f) is pi." % math.pi)
+print ("%+010.3f" % -math.pi)
+print ("%e" % 8675309)
+# %% codecell
+# Fancy formatting, with format strings
+import math
+print (f"This number ({math.pi}) is pi.")
+print (f"This number ({math.pi:.4}) is pi.")
+print (f"This number ({math.pi:10.4}) is pi.")
+print (f"This number ({math.pi:010.4}) is pi.")
+print (f"This number ({math.pi:+010.4}) is pi.")
+print ("{:+010.4}".format(math.pi))
+print ("{}".format(8675309))
+# %% codecell
+# Exponentiation
+print("4 ** 3.8 = %f" % (4 ** 3.8))
+# %% markdown
+# ## String Arithmatic
+# %% codecell
+print("Hi" + " " + "Bye")
+print("Ha" * 3)
+# %% codecell
+print("Na" * 16, "Batman!")
+# %% markdown
+# ## Logic Operators
+# `<`, `<=`, `>`, `>=`, `==`, `!=` compare two values and return `True` or `False`.
+#
+# `and`, `or`, and `not` can combine/modify `True` and `False` values.
+# %% codecell
+x = 3
+x == 4
+print(x)
+# Wait, what???
+# %% codecell
+print(type(x == 4))
+print(x==4)
+# %% codecell
+# Logic operators can be chained.
+print(1 < 2 < 3)
+print(10 < 2 < 3)
+# %% codecell
+x = 3
+y = 18
+z = 10
+print (x < y < z)
+# %% codecell
+# Logic operators can be combined.
+True or False
+# %% codecell
+not False
+# %% codecell
+not True and not False
+# %% markdown
+# # Variables
+# A variable is a discrete memory location used to store values.  Variables may be assigned and re-assigned.
+# %% codecell
+x = 4
+print(x)
+x = 5
+print(x)
+
+# Variables as strings
+x = "Howdy"
+x = x + " Ya'll!"
+print(x)
+# %% markdown
+# Variables have a type associated with them.
+# %% codecell
+x = 5
+type(x)
+# %% codecell
+type(4.5)
+# %% codecell
+type("Foo")
+# %% codecell
+type (3 < 4)
+# %% markdown
+# Variables can be substituted for values in expressions.
+# %% codecell
+x < 8
+# %% codecell
+# Testing for inequality
+print(x != -18)
+print(x != 5)
+# %% markdown
+# Variables can reference themselves in an assignment operator.
+# %% codecell
+print("x = %d" % x)
+x = (x + 3) * x
+print('... and now ...')
+print("x = %d" % x)
+# %% codecell
+ord('`')
+# %% codecell
+chr(96)
+# %% codecell
+ord('z')
+# %% codecell
+ord('a')
+# %% codecell

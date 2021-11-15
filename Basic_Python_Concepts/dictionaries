@@ -1,0 +1,164 @@
+# %% codecell
+import string
+print(''.join([str(a) for a in range(3)]))
+# %% markdown
+# ## Creating a Dictionary
+#
+# https://docs.python.org/3.6/tutorial/datastructures.html#dictionaries
+# %% codecell
+# Creating a Dictionary
+# Empty dictionary
+d = {}
+print(d)
+# %% codecell
+# Give values
+d = {1: "foo", 2: "bar", 3: "baz"}
+print(d)
+print(d[2])
+# %% codecell
+# From a list of tuples
+d = dict([(1, "foo"), (2, "bar"), (3, "baz")])
+print(d)
+# %% codecell
+# From a dictionary comprehension
+d = {x: x**2 for x in range(10)}
+print(d)
+# %% codecell
+# same result as dictionary comprehension above
+e = dict([(x, x**2) for x in range(10)])
+print(e)
+# %% codecell
+# Printing information from the dictionary.
+print(d)
+print(d[3])
+# %% codecell
+# Deleting values from the dictionary by their key
+print(d)
+print("\nDeleting keys 1, 5, and 8.")
+del d[1]
+del d[5]
+del d[8]
+print(d)
+# %% codecell
+# Deleting values from the dictionary by their key
+print(d)
+print("\nDeleting keys 1, 5, and 8.")
+if 1 in d:
+    del d[1]
+if 5 in d:
+    del d[5]
+if 8 in d:
+    del d[8]
+print(d)
+# %% codecell
+# Deleting values from the dictionary by their key
+print(d)
+print("\nDeleting keys 1, 5, and 8.")
+for num in [1, 5, 8]:
+    if num in d:
+        del d[num]
+print(d)
+# %% codecell
+# Getting at the contents of the dictionary
+print(d.keys())
+print(d.values())
+print(d.items())
+# %% codecell
+
+# %% markdown
+# ## The Wonderful Wizard Of Oz
+# ## NOPE!!!!
+# ## FRANKENSTEIN
+# %% codecell
+# This code puts the text of The Wonderful Wizard Of Oz
+# from Project Gutenberg into a string variable called `oz`.
+# The code also saves a copy of the book in a text file on
+# your computer.  The next time that you run the script,
+# it will first try to load the text of the book from your
+# computer.  If it doesn't find it, then it will go ahead
+# and try to download the file.
+filename = 'frank.txt'
+try:
+    # Assume the file exists.  Try to open it.
+    ozfile = open(filename, 'r', encoding="utf-8")
+except:
+    # The file open() failed.
+    try:
+        # Try to download the file.
+        from urllib.request import urlopen
+        print("Fetching the file from the interwebs...")
+        response = urlopen("http://www.gutenberg.org/files/84/84-0.txt")
+        text = response.read().decode("utf-8", errors='ignore')
+
+        # Write the text of the book to a file.
+        ozfile = open(filename, 'w', encoding="utf-8")
+        ozfile.write(text)
+        ozfile.close()
+        ozfile = open(filename, 'r', encoding="utf-8")
+    except:
+        # Something else went wrong.  Do minor cleanup,
+        # then raise another Exception, which will cause
+        # the script to stop running (with an error).
+        if ozfile:
+            ozfile.close()
+        raise Exception("Could not load file.")
+oz = ozfile.read()
+ozfile.close()
+
+print('The Wonderful Wizard of Oz is loaded.  It is %d characters long.' % len(oz))
+print('-' * 80)
+print(oz)
+frank = oz
+# %% codecell
+wordList = {len(word): word for word in frank.split()}
+print(wordList)
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+
+# %% codecell
+# Write code that will count the number of occurrences of each word
+wordList = {}
+
+allowedCharacters = string.ascii_letters + string.digits + "'"
+
+for rawWord in frank.split():
+    # Filter out unwanted characters.
+    word = ""
+    for ch in rawWord.lower():
+        if ch in allowedCharacters:
+            word += ch
+    # Do not filter out the possessive apostrophe.
+    if word[-2:] == "s'":
+        word = word.lstrip("'")
+    else:
+        word = word.strip("'")
+
+    # Add the filtered word to wordList.
+    if word != "":
+        if word not in wordList:
+            wordList[word] = 0
+        wordList[word] += 1
+
+print(wordList)
+# %% codecell
+print(sorted(wordList.items()))
+# %% codecell
+print(sorted([(val, key) for (key, val) in wordList.items()], reverse=True))
+
+# %% codecell
+# Using sorted( ,key= ,reverse=True) to see the most common words.
+# https://docs.python.org/3.6/library/functions.html?highlight=sorted#sorted
+
+
+def getIndex1(item):
+    return item[1]
+
+
+print(sorted(wordList.items(), reverse=True, key=getIndex1))
+
+# %% codecell

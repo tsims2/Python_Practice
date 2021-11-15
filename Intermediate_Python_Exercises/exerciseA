@@ -1,0 +1,451 @@
+# %% markdown
+# # Midterm Exam - Due October 10th, 2:00PM
+#
+# ## (155 Points)
+#
+# %% codecell
+### CELL 0 ###
+#
+# REMEMBER: YOU ARE NOT ALLOWED TO WORK IN GROUPS OF ANY SIZE.
+# ALL QUESTIONS MUST BE SOLVED ENTIRELY ON YOUR OWN!
+#
+# Please enter your name below:
+# 1.) Tyler Sims
+##############
+# %% markdown
+# ## Question 1: Indexing and Slicing (20 Points)
+# You are provided with a variable called `randlist`.  Each time that the code is run, `randlist` will be regenerated with a random length.  Your task is to make all of the print statements to print the correct output by using indexing and/or slicing on the `randlist` variable that appears in that line.
+#
+# ### Constraints
+# 1. All of the list manipulations must be done only using *indexing* (i.e., `[]`) and/or  *slicing* (i.e., `[::]`, `[:]`, etc).
+# 2. You must not change the `randlist` variable.
+# 3. You cannot create any additional variables.
+# 4. The only modifications that you can make to the code is to add indexing and/or slicing to `randlist`.
+#
+# ### Hints
+# 1. Remember that slicing can have up to three values: a *start* value, an *end* value, and a *skip* value.
+# 2. Remember that these numbers can be negative and and positive.
+# 3. Remember that you don't always need all of the values.
+# 4. Remember that indexing is 0-based.
+#
+# ### Example
+# If the code is:
+# ```
+# print("\nThe third element of randlist is:")
+# print(randlist)
+# ```
+# You should change it to:
+# ```
+# print("\nThe third element of randlist is:")
+# print(randlist[2])
+# ```
+#
+# %% codecell
+### Question 1 ###
+import random
+randlist = []
+for x in range(random.randint(15,23)):
+    randlist.append(x)
+print("\nThe initial list is:")
+print(randlist)
+
+### Write your code below this line ###
+
+print("\nThe fifth element of randlist is:")
+print(randlist[4])
+
+print("\nA list containing only the fifth element of randlist is:")
+print(randlist[4:5])
+
+print("\nA list containing the 2nd through 12th elements of randlist is:")
+print(randlist[1:11])
+
+print("\nThe last element of randlist is:")
+print(randlist[-1])
+
+print("\nA list containing the last element of randlist is:")
+print(randlist[-1:])
+
+print("\nA list containing the last 5 elements of randlist is:")
+print(randlist[-5:])
+
+print("\nA list containing everything except the last 5 elements of randlist is:")
+print(randlist[0:-5])
+
+print("\nA list containing the even elements of randlist is:")
+print(randlist[0::2])
+
+print("\nA list containing the odd elements of randlist is:")
+print(randlist[1::2])
+
+print("\nA list containing the elements of randlist in reverse order is:")
+print(randlist[::-1])
+
+### Do not change the code below this line ###
+# %% markdown
+# ## Question 2: List Comprehensions (20 Points)
+#
+# Create the lists described below using List comprehensions.  The instructions for each part is found in the corresponding `print()` statement.
+#
+# ### Constraints
+# 1. Do not add any additional lines of code.
+# 2. Your code should only be entered between the square brackets `[]`.
+#
+# ### Hints
+# 1. Remember that List comprehensions can be filtered (*e.g.,* `[for..in..if]`).
+# 2. The `string` library is imported, so you can use its constants.
+# 3. The `math` library is imported.
+# 4. The variable `gettysburg_address` is provided for you, which is needed for some (but not all) questions.
+#
+# ### Example
+# If the code is:
+# ```
+# print("\nA list containing the even numbers 0 through 30:")
+# print([])
+# ```
+# You should change it to:
+# ```
+# print("\nA list containing the even numbers 0 through 30:")
+# print([x for x in range(0, 31, 2)])
+# ```
+# Or:
+# ```
+# print("\nA list containing the even numbers 0 through 30:")
+# print([x for x in range(31) if not x % 2])
+# ```
+# Or some other equivalent list comprehension (there are several other alternatives).
+# %% codecell
+### Question 2 ###
+import string
+import math
+gettysburg_address = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+### Write your code below this line ###
+
+# Example output starts:
+# ['A', 'B', ...
+print("\nA list containing all uppercase letters of the alphabet:")
+print([x for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
+
+# Example output starts:
+# ['*', '**', '***', ...
+print("\nA list of 25 strings, with each string containing n + 1 asterisks, where n is the index of the string within the list:")
+print(["*" * x for x in range(1,26)])
+
+# Example output starts:
+# [(0.0, 0.0), (0.01, 0.009999833334166664), ...
+print("\nA list of tuples (x, sin(x)) for values of x 0 through .5 in increments of .01:")
+print([((x / 100), math.sin(x / 100)) for x in range(0,51)])
+
+# Example output starts:
+# [(0, 32.0), (1, 33.8), ...
+print("\nA list containing the tuple (x, F(x)), where x represents the temperature 0 to 100 degrees Celcius, and F(x) is that temperature converted to Farenheit using the standard formula:")
+print([(x, x * (9/5) + 32) for x in range(0,101)])
+
+# Example output starts:
+# [(10, 100, 1000), (11, 121, 1331), ...
+print("\nA list containing the tuples of x, its square, and its cube, for values of x 10 through 20:")
+print([(x, x**2, x**3) for x in range(10,21)])
+
+# Example output starts:
+# [0, 4, ...
+print("\nA list containing the squares of x, 0 through 25, but only if the square is divisible by 3 or 4:")
+print([x**2 for x in range(0,26) if not x**2 % 4 or not x**2 % 3])
+
+# Example output starts:
+# ['seven', 'conceived', ...
+print("\nA list of words in the Gettysburg Address, in which each word has at least two e's:")
+print([x for x in gettysburg_address.split() if "ee" in ''.join(sorted(x))])
+
+# Example output starts:
+# ['o', 'u', 'o', 'e',
+print("\nA list of all the vowels (aeiou) in the Gettysburg Address (i.e., filter out the consonants) in the order that they appear:")
+print([x for x in gettysburg_address if x in "aeiou"])
+
+# Example output starts:
+# ['and', 'ago', ...
+print("\nA list of words from the Gettysburg Address that contains less than 4 letters ('--' is ok):")
+print([word for word in gettysburg_address.split() if len(word) < 4])
+
+# Example output starts:
+# ['AND', 'AGO', ...
+print("\nA list of words from the Gettysburg Address that contains less than 4 letters, but also has all words converted to uppercase and '--' is filtered out:")
+print([word.upper() for word in gettysburg_address.split() if not word in "--" if len(word) < 4])
+
+### Do not change the code below this line ###
+# %% markdown
+# ## Question 3: Function and Tuple (20 Points)
+# Write a function called `computetime(seconds)` which takes in a number, in seconds, and returns a 4-tuple containing the number of days, hours, minutes, and seconds represented by the input number of seconds.
+#
+# ### Constraints
+# 1. You may only modify the interior of the `computetime()` function.
+# 2. You cannot access any outside libraries to perform the computations.
+#
+# ### Hints
+# 1. Replace the `return (0,0,0,0)` with the correct calculations.
+# 2. Remember math tools such as `//` (integer division) and `%` (modulo).
+#
+# ### Example
+# One of the lines of output will be this:
+# ```
+# 1000000 seconds is equivalent to 11 day(s), 13 hour(s), 46 minute(s), and 40 second(s).
+# ```
+# %% codecell
+### Question 3 ###
+### Write your code below this line ###
+def computetime(seconds):
+    days = 0
+    hours = 0
+    minutes = 0
+    while seconds >= 86400:
+        seconds = seconds - 86400
+        days = days + 1
+    while 86400 > seconds >= 3600:
+        seconds = seconds - 3600
+        hours = hours + 1
+    while 3600 > seconds >= 60:
+        seconds = seconds - 60
+        minutes = minutes + 1
+    return days,hours,minutes,seconds
+
+### Do not change the code below this line ###
+for secs in [10**(i / 2.5) for i in range(20)]:
+    days, hours, minutes, seconds = computetime(secs)
+    print("%d seconds is equivalent to %d day(s), %d hour(s), %d minute(s), and %d second(s)." % (secs, days, hours, minutes, seconds))
+# %% markdown
+# ## Question 4: Functions and Loops (20 Points)
+#
+# Write a function called `inboth(s1, s2)` which takes two strings and returns a string containing the characters that are in both strings.
+#
+# ### Constraints
+# 1. The value that is returned by the function must be a string.
+# 1. The returned string must not contain any duplicate letters.
+# 2. The returned string must be ordered by ASCII value.
+#
+# ### Hints
+# 1. Remember the `in` operator.
+# 2. Remember the `sorted()` function.
+# 3. Your function should handle all characters, and not just letters or numbers.
+# 4. Sample output:
+#
+# ```
+# String 1: "Bert and Ernie"
+# String 2: "Batman and Robin"
+# Characters in common: " Badint"
+# ```
+# %% codecell
+### Question 4 ###
+### Write your code below this line ###
+def inboth(s1, s2):
+    s3 = []
+    for x in s1:
+        if x in s2 and x not in s3:
+            s3.append(x)
+    return s3
+
+### Do not change the code below this line ###
+
+# Set up pairs of phrases to test, using a list of tuples.
+pairs = [("Bert and Ernie","Batman and Robin"),
+         ("Hello, my dear friend!", "What?!?"),
+         ("The quick brown fox jumped over the lazy dog.", "Dr. Livingstone, I presume"),
+         ("8675309", "3.14159"),
+         ("What is the answer to this question?", ""),
+         ("Where's Waldo?", "Where's Waldo?"),
+         ("How much wood would a woodchuck chuck if a woodchuck could chuck wood?", "A woodchuck would chuck all the wood he could if a woodchuck could chuck wood.")]
+
+# Test the pairs of words.
+for word1, word2 in pairs:
+    print('String 1: "%s"\nString 2: "%s"\nCharacters in common: "%s"\n' % (word1, word2, ''.join(sorted(inboth(word1, word2)))))
+# %% markdown
+# ## Question 5: Functions and Loops (30 Points)
+# Write a function called `printTree(size)` that prints out a tree of the requested size.
+#
+# ### Constraints
+#   1. The printed pattern is mathematically related to the `size` variable that is passed in to the function.
+#   2. The length of the "trunk" is also mathematically related to the `size` variable.
+#   3. Your output should match the sample output for the sizes given.
+#
+# ### Example Output
+#
+# ```
+# Printing a tree of size 3.
+#   ^
+#  ^^^
+# ^^^^^
+#   |
+#
+# Printing a tree of size 4.
+#    ^
+#   ^^^
+#  ^^^^^
+# ^^^^^^^
+#    |
+#    |
+#
+# Printing a tree of size 5.
+#     ^
+#    ^^^
+#   ^^^^^
+#  ^^^^^^^
+# ^^^^^^^^^
+#     |
+#     |
+#
+# Printing a tree of size 6.
+#      ^
+#     ^^^
+#    ^^^^^
+#   ^^^^^^^
+#  ^^^^^^^^^
+# ^^^^^^^^^^^
+#      |
+#      |
+#      |
+#
+# Printing a tree of size 7.
+#       ^
+#      ^^^
+#     ^^^^^
+#    ^^^^^^^
+#   ^^^^^^^^^
+#  ^^^^^^^^^^^
+# ^^^^^^^^^^^^^
+#       |
+#       |
+#       |
+# ```
+# %% codecell
+### Question 5 ###
+### Write your code below this line ###
+def printTree(size):
+    w = (size * 2) - 1
+    h = (size)
+    t = (int((1/2)*size))
+    for row in range(1,h+1):
+        print(("^" * ((row * 2)-1)).center(w))
+    for trunk in range(0,t):
+        print("|".center(w))
+    return
+
+
+### Do not change the code below this line ###
+for s in range(3, 15):
+    print(f"Printing a tree of size {s}.")
+    printTree(s)
+    print()
+# %% markdown
+# ## Question 6: Code Minification (45 Points)
+#
+# Re-write the following code so that it fits on as few lines as possible.
+#
+# The point of this section is for you to be able to understand the code that someone else has written, as well as to express the same idea in a concise manner.
+#
+# Partial credit will be given for improved (but perhaps not optimal) solutions.
+#
+# We are not grading efficiency, but correctness of the code with respect to any input values.
+#
+# ### Example:
+#
+# If the code is:
+#
+# ```
+# nums = ""
+# for x in range(1000):
+#     if int(x ** .5) == x ** .5:
+#         nums += f"\n{str(x)}"
+# print(nums)
+# ```
+#
+# You could write:
+#
+# ```
+# print("\n".join([str(x) for x in range(1000) if int(x ** .5) == x ** .5]))
+# ```
+#
+# **Note:** This list in this example happens to be the list of perfect squares.  With this realization, you can write an even simpler solution.  The problems below are not as straightforward.  This particular example also does not have any input variables, either.  The problems below, however, do have an input variable.  Your solution must use that variable with either the supplied value, or any other value that we substitute in.  In other words, your solution must adapt to whatever value the supplied variable is set to, just as the "Original Code" section does.
+# %% markdown
+# #### 6a
+# %% codecell
+### Question 6a ###
+gettysburg_address = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+### Original Code
+### Do not change the code in this cell
+
+gba = gettysburg_address.upper()
+sortedWords = sorted(gba.split(), key=len, reverse=True)
+wordlist = []
+for word in sortedWords:
+    wordlist.append((word, len(word)))
+print(wordlist)
+
+# %% codecell
+### Question 6a Rewrite ###
+gettysburg_address = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+### This can be re-written in as little as 1 line.
+### Write your code below this line.
+
+print([(x.upper(), len(x)) for x in sorted(gettysburg_address.split(), key=len, reverse=True)])
+# %% markdown
+# #### 6b
+# %% codecell
+### Question 6b ###
+message = "Rally sons of Notre Dame!!!"
+### Original Code
+### Do not change the code in this cell
+
+words = message.split()
+maxlen = 0
+for word in words:
+    maxlen = max(maxlen, len(word))
+print('*' * (maxlen + 4))
+for word in words:
+    print(f"* {word:^{maxlen}} *")
+print('*' * (maxlen + 4))
+
+# %% codecell
+### Question 6b Rewrite ###
+message = "Rally sons of Notre Dame!!!"
+### This can be re-written in as little as 1 line.
+### Write your code below this line.
+
+print("*" * (max([len(word) for word in message.split()]) + 4) + ('\n') + ''.join([(f"* {word:^{maxlen}} *\n") for word in message.split()]) + '*' * (max([len(word) for word in message.split()]) + 4))
+# %% markdown
+# #### 6c
+# Your re-written code will be in the `printRhombus()` function.
+# %% codecell
+### Question 6c ###
+### Original Code
+### Do not change the code in this cell
+def printRhombus(size, times):
+    for line in range(size + 1):
+        for time in range(times):
+            print(f"{'#'*line:<{size}}", end=" ")
+        print()
+    for line in range(size - 1, 0, -1):
+        for time in range(times):
+            print(f"{'#'*line:>{size}}", end=" ")
+        print()
+
+
+### Do not change the code below this line ###
+for s in range(1, 8):
+    print(f"Printing {s + 1} Rhombus(es) of size {s}.")
+    printRhombus(s, s + 1)
+    print()
+# %% codecell
+### Question 6c Rewrite ###
+
+### This function body can be re-written in as little as 1 line (replacing `pass`).
+### Write your code below this line.
+def printRhombus(size, times):
+    print('\n'.join([''.join([f"{'#'*s:<{size}} " for t in range(times)]) for s in range(size+1)]) + '\n' + '\n'.join([''.join([f"{'#'*s:>{size}} " for t in range(times)]) for s in range(size-1, 0,-1)]))
+
+### Do not change the code below this line ###
+for s in range(1, 8):
+    print(f"Printing {s + 1} Rhombus(es) of size {s}.")
+    printRhombus(s, s + 1)
+    print()
+
+# %% codecell
+
+# %% codecell

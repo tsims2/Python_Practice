@@ -1,0 +1,330 @@
+# %% markdown
+# # Homework 5 - Due November 14th (115 Points)
+#
+#
+# %% markdown
+# *** Note: If you don't remember how to work with Random numbers, see the notes from October 10. ***
+# %% markdown
+# ## Question 1: Rock, Paper, Sissors (25 Points)
+#
+# You are going to play Rock, Paper, Sissors against the computer!
+#
+# 1. Using `input()`, ask the user to enter either R, P, or S, or Q to quit.
+# 2. If the user enters anything other than those 4 inputs (ignoring whitespace), then print an error message and ask them to try again.
+# 3. After they choose rock, paper, or sissors, have the computer choose either rock, paper or sissors at random.
+# 4. Inform the user of the computer's choice, and whether or not the user won.
+# 5. Repeat from step 1.
+# 6. If the user inputs "Q", then tell the user how many games that they won, how many games the computer won, and how many ties.
+#
+# A sample game is shown below.  Your output should match the sample output.
+#
+# ```
+# Welcome to Rock, Paper, Sissors!
+#
+# Please enter R, P, or S, or Q to quit: R
+# You chose Rock.  The computer chose Rock.  It's a tie!
+# Please enter R, P, or S, or Q to quit: p
+# You chose Paper.  The computer chose Rock.  You won!
+# Please enter R, P, or S, or Q to quit: x
+# Error processing input.
+# Please enter R, P, or S, or Q to quit: S
+# You chose Sissors.  The computer chose Paper.  You won!
+# Please enter R, P, or S, or Q to quit: R
+# You chose Rock.  The computer chose Paper.  The computer wins!
+# Please enter R, P, or S, or Q to quit: q
+# You won 2 games.  The computer won 1 game.  You tied 1 time.
+# ```
+#
+# Another example run:
+# ```
+# Welcome to Rock, Paper, Sissors!
+#
+# Please enter R, P, or S, or Q to quit: R
+# You chose Rock.  The computer chose Rock.  It's a tie!
+# Please enter R, P, or S, or Q to quit: s
+# You chose Sissors.  The computer chose Sissors.  It's a tie!
+# Please enter R, P, or S, or Q to quit: q
+# You won 0 games.  The computer won 0 games.  You tied 2 times.
+# ```
+#
+# Notice that the words change with the number of wins/losses/ties.  (e.g., "0 games" vs. "1 game" vs. "2 games".)
+#
+# You have been provided with a function called `getComputerChoice()` which will return a random value for the computer's play.
+#
+# %% codecell
+### Question 1 ###
+import random
+random.seed()
+
+### Write your code below this line ###
+
+print("Welcome to Rock, Paper, Sissors!")
+
+check = 0
+wins = 0
+loses = 0
+ties = 0
+
+while check == 0:
+    choice = input("Please enter R, P, or S, or Q to quit: ")
+    cc = random.randint(1,3)
+
+    if choice == "R":
+        if cc == 1:
+            print("You chose Rock.  The computer chose Rock.  It's a tie!")
+            ties = ties + 1
+        if cc == 2:
+            print("You chose Rock.  The computer chose Sissors.  You won!")
+            wins = wins + 1
+        if cc == 3:
+            print("You chose Rock.  The computer chose Paper.  The computer wins!")
+            loses = loses + 1
+
+    if choice == "P":
+        if cc == 1:
+            print("You chose Paper.  The computer chose Rock.  You won!")
+            wins = wins + 1
+        if cc == 2:
+            print("You chose Paper.  The computer chose Sissors.  The computer wins!")
+            loses = loses + 1
+        if cc == 3:
+            print("You chose Paper.  The computer chose Paper.  It's a tie!")
+            ties = ties + 1
+
+    if choice == "S":
+        if cc == 1:
+            print("You chose Sissors.  The computer chose Rock.  The computer wins")
+            loses = loses + 1
+        if cc == 2:
+            print("You chose Sissors.  The computer chose Sissors.  It's a tie!")
+            ties = ties + 1
+        if cc == 3:
+            print("You chose Sissors.  The computer chose Paper.  You won!!")
+            wins = wins + 1
+
+    if choice == "Q":
+        winsoutput =  "You won " + str(wins) + " games."
+        losesoutput = "The computer won " + str(loses) + " games."
+        tiesoutput = "You tied " + str(ties) + " times."
+        if wins == 1:
+            winsoutput = "You won 1 game. "
+        if loses == 1:
+            losesoutput = "The Computer won 1 game. "
+        if ties == 1:
+            tiesoutput = "You tied 1 time. "
+        print(f'{winsoutput} {losesoutput} {tiesoutput}')
+        check = check + 1
+
+    if choice not in "RPSQ":
+        print("Error processing input.")
+
+
+
+# %% markdown
+# ## Question 2: ASCII Graphics (20 Points)
+#
+# Complete the functions to generate the following shapes in asterisks: square, right triangle, and triangle.  You may notice that extra spaces occur after the asterisks in the Right Triangles.  This may be a hint to you that you can use the Right Triangle function to create the larger, triangle function.
+#
+# Although it is not required to do so, all three functions can be written as a single line of code.
+#
+# Sample Output:
+# ```
+# #######################
+# ###     Squares     ###
+# #######################
+# *
+#
+# **
+# **
+#
+# ***
+# ***
+# ***
+#
+# ****
+# ****
+# ****
+# ****
+#
+# #######################
+# ### Right Triangles ###
+# #######################
+# *
+#
+# *
+# **
+#
+# *
+# **
+# ***
+#
+# *
+# **
+# ***
+# ****
+#
+# #######################
+# ###    Triangles    ###
+# #######################
+# *
+#
+#  *
+# ***
+#
+#   *
+#  ***
+# *****
+#
+#    *
+#   ***
+#  *****
+# *******
+#
+# ```
+# %% codecell
+### Question 2 ###
+### Write your code in the function below this line ###
+
+def make_square(size):
+    for x in range(size):
+        print('*' * size)
+
+
+def make_right_triangle(size):
+    for x in range(size):
+        print
+    pass
+
+def make_triangle(size):
+    pass
+
+### Do not change the code below this line ###
+print('#######################')
+print('###     Squares     ###')
+print('#######################')
+for i in range(1,7):
+    print(make_square(i))
+    print()
+
+print('#######################')
+print('### Right Triangles ###')
+print('#######################')
+for i in range(1,7):
+    print(make_right_triangle(i))
+    print()
+
+print('#######################')
+print('###    Triangles    ###')
+print('#######################')
+for i in range(1,7):
+    print(make_triangle(i))
+    print()
+
+
+# %% markdown
+# ## Question 3: More ASCII Graphics (20 Points)
+#
+# Using your functions from Question 2, write a function that will print all three shapes on the same lines, consecutively.  With the right approach, this can be written in a single line (although you may use more than one line of code for better readability).
+#
+# Hint: Think about the different ways that you can combine `.splitlines()`, `.join()`, `zip()`, and list comprehensions.  Notice that the function that you are writing should return a string.
+#
+# Example output when run as `print(make_three_shapes(6))`:
+# ```
+# ****** *           *
+# ****** **         ***
+# ****** ***       *****
+# ****** ****     *******
+# ****** *****   *********
+# ****** ****** ***********```
+#
+# %% codecell
+### Question 3 ###
+### Write your code below this line ###
+
+def make_three_shapes(size):
+    pass
+
+### Do not change the code below this line ###
+for i in range(1,7):
+    print(make_three_shapes(i))
+    print()
+# %% markdown
+# ## Question 4: Like a Lambda to the slaughter (20 Points)
+#
+# Alter the code below to behave correctly using lambda expressions.  Un-comment the code lines as you go.  They are commented in the beginning, just so that you can run the script as you develop your answers.  The only thing that you need to do for each line is to complete the missing lambda expression.
+#
+# To help you out, I have provided the `print()` statement, and have left the word `lambda` to indicate where the lambda expression that you write should appear.
+#
+# Also, note that I have included an additional `print()` whose purpose is to print an empty line to help the readability of your answers.  This line should not be altered.
+#
+# %% codecell
+### Question 4 ###
+gettysburg_address = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+
+### Write your code below this line ###
+
+print('Here are the words of the Gettysburg Address, sorted in ascending alphabetical order, ignoring case, but also ignoring the first letter of the word (when sorting).')
+# Note: it is expected that words of lenth 1 will be first.
+#   For example, if the words being sorted were: I hate chocolate cake.
+#   The output would be ['I', 'cake.', 'hate', 'chocolate']
+#print(sorted(gettysburg_address.split(), key=lambda ))
+print()
+
+print('Here are the words of the Gettysburg Address, sorted in ascending order by the letters of the word, reversed, and ignoring case.')
+#   For example, if the words being sorted were: I love chocolate cake.
+#   The output would be ['hate', 'chocolate', 'love.', 'I']
+#print(sorted(gettysburg_address.split(), key=lambda ))
+print()
+
+print('Here are the words of the Gettysburg Address.  They are filtered so that only words with two or more vowels (AEIOUaeiou) are printed.')
+# In this example, "ago" should print, but "this" should not.
+#print([*filter(lambda , gettysburg_address.split())])
+print()
+
+print('Here are the words of the Gettysburg Address (as a string), but each word is converted to uppercase, and the letters of each word are in reverse order.')
+# RUOF EROCS DNA NEVES SRAEY OGA...
+#print(' '.join(map(lambda , gettysburg_address.split())))
+print()
+
+# %% markdown
+# ## Question 5: Sin() on the dotted line (30 Points)
+#
+# Your task is to make an Ascii (text) representation of a Sine wave.  There's several (very different) ways to approach this, but they all start with determining the size of the drawing, followed by determining the `x` and `y` values.
+#
+# For simplicity, we will use an `x` value ranging from 0 to 2π.  The y value range should be self-evident.
+#
+# Draw an x axis as well as a y axis.
+#
+# Your final "graph" should be 51 characters wide (1 character for the axis, 50 for the drawing) by 15 characters tall.  An example of what it might look like is shown below:
+#
+# ```
+# |          ******
+# |        **      **
+# |      **          **
+# |     *              *
+# |   **                **
+# |  *                    *
+# | *                      *
+# |--------------------------------------------------
+# |                          *                      *
+# |                           *                    *
+# |                            **                **
+# |                              *              *
+# |                               **          **
+# |                                 **      **
+# |                                   ******
+# ```
+#
+# Coming up with a good mental model for the problem is probably your biggest challenge here.  I offer these hints:
+# * You're not actually drawing lines.  You're calculating points.
+# * You have 50 `x` values, from 0 to 2π.  Computing what each one of those values is is trivial.  It's really just a scaling problem.
+# * You have a corresponding `y` value, which is also trivial to compute.
+# * You know that you need to use that `y` value to determine how hight (that is, in which row) the `*` should be, right? You can do that with simple math.  It's really just a simple scaling problem (again).
+# * Once you know which row, you can then print out each row, one column at a time.  For each character, ask yourself whether or not you should be printing a space (` `) or an asterisk (`*`) at that location.
+# %% codecell
+### Question 5 ###
+import math
+
+### Write your code below this line ###
+
+# %% codecell

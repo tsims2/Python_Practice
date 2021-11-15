@@ -1,0 +1,170 @@
+# %% markdown
+# # Homework 3 (90 Points)
+#
+# ## Due: 09/26/19
+# %% codecell
+### CELL 0 ###
+# Please enter your name(s) below.
+# NOTE: If you are using a nickname, please include your real name in parenthesis.
+# Example: Bubba (Corey) Pennycuff
+##############
+# 1.) Tyler Sims
+# 2.)
+##############
+# %% markdown
+# ## Part 1: Input... More Input!!! (20 Points)
+#
+# https://www.youtube.com/watch?v=Pj-qBUWOYfE
+#
+# Write a program that asks a user for their name.  Your program should then print out their name in reverse order.
+#
+# For example, if their name is "Robert Frost", then your program should print out `Frost, Robert`.  If their name is "Sarah Fuller Flower Adams", then your program should print out `Adams, Sarah Fuller Flower`.  If they are famous and only have a single name, like `McLovin`, then your program should simply print out their awesome mononym.
+#
+# Hint: [`input()`](https://docs.python.org/3/library/functions.html#input) is your friend.
+# %% codecell
+### CELL 1 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+##############
+
+x = input("What is your name? ").split()
+l = len(x)
+
+print(f"{x[-1]}, ", end = "")
+print(' '.join([y for y in x[:l-1]]))
+# %% markdown
+# ## Part 2: Add up the Digits (20 Points)
+#
+# Write a program that asks the user for a number.  Interpret that number as an integer and print the sum of the digits.
+#
+# For example, if the user enters "5604", your program should print `15`.  If the user enters -31, your program should print `4`.
+# %% codecell
+### CELL 2 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+##############
+
+digit = input("Write in a number: ")
+solution = 0
+
+for num in digit:
+    if num in "1234567890":
+        num = int(num)
+        solution = solution + num
+
+print(solution)
+# %% markdown
+# ## Part 3: Simple Function (15 Points)
+#
+# Write a function called `getHypotenuse()` that takes 2 arguments, which are interpreted as the two sides of a right triangle.  Return the measurement of the hypotenuse.
+#
+# To help you out, the function is started for you below.
+# %% codecell
+### CELL 3 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+# The function has been started for you below.
+# The function should return the hypotenuse.
+##############
+def getHypotenuse(side1, side2):
+    side3 = (side1**2 + side2**2)**(1/2)
+    return side3
+# %% markdown
+# After you complete the `getHypotenuse()` function above, the following code snippet will use your function to compute the hypotenuse for several different triangle sizes.
+# %% codecell
+for s1 in range(1,5):
+    for s2 in range(1,6):
+        print (f"A triangle with sides {s1} and {s2} has a hypotenuse of {getHypotenuse(s1, s2)}")
+# %% markdown
+# ## Part 4: Harder Function (35 Points)
+#
+# In cryptography, a Caesar shift is one of the simplest and most widely known encryption techniques. It is a type of substitution cipher in which each letter in the plaintext is replaced by a letter some fixed number of positions down the alphabet. For example, with a shift of `-3`, `D` would be replaced by `A`, `E` would become `B`, and so on. The method is named after Julius Caesar, who used it in his private correspondence.
+#
+# Write a function `caesar_shift()` that takes 2 arguments: a `message` to be encoded/decoded, and a `shift` amount.
+#
+# * Include comments in your function to explain your approach to solving this problem.
+# * A positive `shift` should result in a message in which each letter of the message has advanced through the alphabet the requested number of letters.  A negative shift has the opposite affect.
+#   * For example, if the `shift` is `1`, then an `A` will become a `B`, a `B` will become a `C`, a `Y` will become a `Z`, and a `Z` will wrap around the alphabet and become an `A`.  A negative `shift` works in reverse.
+# * Capital letters should only be replaced with capital letters.
+# * Lower case letters should only be replaced with lower case letters.
+# * Any other characters should pass through unaltered.
+#
+# A quick example:
+#
+# * `print(caesar_shift("Dog", 1))` should print `Eph`.  Likewise, `print(caesar_shift("Eph", 1))` should print `Fqi`.  Finally, `print(caesar_shift("Fqi", -2))` should undo both of the prior shifts, and print `Dog`.
+#
+# Hints:
+#
+# * This program is much more complicated than your earlier programs.  Don't panic.  Rather, think through this in small steps.
+#   * Pretend that you only have a single character.  How would you perform the Caesar shift on just that one character?
+#   * You know that you will need to step through `message` one character at a time, so how do you do that?
+#   * You know that you will need to "build up" a new string.  How can you do that?  There are actually several different approaches that will work just fine.
+# * We have already discussed EVERYTHING that you need to know in order to solve this problem.  That doesn't mean that it's simple, of course.  Programming is like Lego blocks.  You know a lot of little things, now you have to start putting them together into something big.
+# * Draw pictures of the process to help you think through it.
+# %% codecell
+### CELL 4 ###
+# Write your code in this cell.
+# Do not remove this comment block.  Write your code after this comment block.
+# The function has been started for you below.
+# The function should return the shifted string.
+##############
+import string
+
+def caesar_shift(message, shift):
+    cCh = []
+    nCh = []
+
+    for x in message:
+
+        #Checking for for capital letters
+        if 65 <= ord(x) <= 90:
+            if shift >= 0:
+                if shift <= 90 - ord(x):
+                    cCh.append(ord(x) + shift)
+                else:
+                    cCh.append(ord(x) + shift - 26)
+            else:
+                if shift >= 65 - ord(x):
+                    cCh.append(ord(x) + shift)
+                else:
+                    cCh.append(ord(x) + shift + 26)
+
+        #Checking for lowercse letters
+        if 97 <= ord(x) <= 122:
+            if shift >= 0:
+                if shift <= 122 - ord(x):
+                    cCh.append(ord(x) + shift)
+                else:
+                    cCh.append(ord(x) + shift - 26)
+            else:
+                if shift >= 97 - ord(x):
+                    cCh.append(ord(x) + shift)
+                else:
+                    cCh.append(ord(x) + shift + 26)
+
+        #Checking for spacingf and punctuation
+        if 0 <= ord(x) <= 64:
+            cCh.append(ord(x))
+
+
+    for y in cCh:
+        nCh.append(chr(y))
+    return ''.join(nCh)
+# %% markdown
+# Once you write your `caesar_shift()` function, run the code below to test it.
+# %% codecell
+print('caesar_shift("Dog", 1) should be "Eph".  Your function says that it is:', caesar_shift("Dog", 1))
+print('caesar_shift("Eph", 1) should be "Fqi".  Your function says that it is:', caesar_shift("Eph", 1))
+print('caesar_shift("Fqi",-2) should be "Dog".  Your function says that it is:', caesar_shift("Fqi",-2))
+print('caesar_shift("Aa", -1) should be "Zz".  Your function says that it is:', caesar_shift("Aa", -1))
+print('caesar_shift("Xx.13", 5) should be "Cc.13".  Your function says that it is:', caesar_shift("Xx.13", 5))
+print('Caesar Shifts are semetric when the shift is 13.  The next two lines should be identical:')
+print(caesar_shift('The Quick Brown Fox Jumped Over The Lazy Dog. 8675309!', 13))
+print(caesar_shift('The Quick Brown Fox Jumped Over The Lazy Dog. 8675309!', -13))
+print('The uppercase and lowercase alphabet should print on the next line:')
+for i in range(26):
+    print(caesar_shift("A", i), end="")
+for i in range(26):
+    print(caesar_shift("a", i), end="")
+
+# %% codecell
